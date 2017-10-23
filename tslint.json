@@ -1,8 +1,21 @@
 {
-    "extends": "tslint-config-airbnb",
-    "rules": {
-      "import-name": false,
-      "object-shorthand-properties-first": false,
-      "object-curly-spacing": false
-    }
+  "extends": "tslint-config-airbnb",
+  "rules": {
+    "import-name": false,
+    "object-shorthand-properties-first": false,
+    "no-increment-decrement": false,
+    "max-line-length": {
+      "options": [
+        180
+      ]
+    },
+    "object-curly-spacing": false,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore"
+    ],
+    "ter-arrow-parens": false,
+    "radix": false
+  }
 }
