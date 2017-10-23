@@ -6,6 +6,6 @@ import WithRender from './App.html?style=./App.css';
 @Component
 export default class App extends Vue {
 
-  private visible:boolean = false;
+  private visible: boolean = false;
 
 }
