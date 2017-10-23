@@ -11,7 +11,7 @@ export class Album extends Document implements AlbumOptions {
   constructor(options: AlbumOptions) {
     super(options);
     options.children.forEach(document => {
-      this._children.push(this.factory.getDocument(options));
+      this._children.push(this.factory.getDocument(document));
     });
   }
 
