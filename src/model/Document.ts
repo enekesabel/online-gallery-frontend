@@ -1,6 +1,9 @@
 import {User} from './User';
+import {Comment} from './Comment';
+import {DocumentOptions} from './DocumentOptions';
+import {DocumentType} from './DocumentType';
 
-export abstract class Document {
+export abstract class Document implements DocumentOptions {
   private _id: number;
   private _name: string;
   private _description: string;
@@ -10,8 +13,26 @@ export abstract class Document {
   private _comments: Comment[] = [];
   private _parent: Document = null;
 
+  constructor(options: DocumentOptions) {
+    this._id = options.id;
+    this._name = options.name;
+    this._description = options.description;
+    this._url = options.url;
+    this._createdAt = options.createdAt;
+    if (options.owner instanceof User) {
+      this._owner = options.owner;
+    } else {
+      this._owner = new User(options.owner);
+    }
+    options.comments.forEach(comment => {
+      this.comments.push(new Comment(comment));
+    });
+    this._parent = options.parent;
+  }
+
   abstract get children(): Document[];
-  abstract get type(): string;
+
+  abstract get type(): DocumentType;
 
   get id(): number {
     return this._id;
