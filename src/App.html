@@ -1,4 +1,6 @@
 <div id="app">
-  <img src="./assets/logo.png">
-  <router-view></router-view>
+  <el-button @click="visible = !visible">Button</el-button>
+  <el-dialog v-model="visible" :close-on-click-modal="true" title="Hello world">
+    <p>Try Element</p>
+  </el-dialog>
 </div>

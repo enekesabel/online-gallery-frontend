@@ -14,6 +14,7 @@
     "tslint": "tslint -s node_modules/custom-tslint-formatters/formatters -t grouped 'src/**/*.ts' 'test/unit/**/*.ts' 'test/e2e/*.ts'"
   },
   "dependencies": {
+    "element-ui": "^1.4.7",
     "vue": "^2.5.0",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^6.0.0",

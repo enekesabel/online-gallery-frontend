@@ -5,4 +5,7 @@ import WithRender from './App.html?style=./App.css';
 @WithRender
 @Component
 export default class App extends Vue {
+
+  private visible:boolean = false;
+
 }
