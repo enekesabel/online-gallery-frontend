@@ -18,7 +18,7 @@ export class Album extends Document implements AlbumOptions {
   get type(): DocumentType {
     return this._type;
   }
-
+í
   get children(): Document[] {
     return this._children;
   }
