@@ -3,7 +3,7 @@ import {ImageOptions} from './ImageOptions';
 import {DocumentType} from './DocumentType';
 
 export class Image extends Document implements ImageOptions {
-  private _type: DocumentType = DocumentType.IMAGE;
+  protected _type: DocumentType = DocumentType.IMAGE;
   private _size: number;
   private _width: number;
   private _height: number;
