@@ -1,17 +1,10 @@
-import {UserOptions} from './UserOptions';
 import {CommentOptions} from './CommentOptions';
-import {DocumentType} from './DocumentType';
 import {Document} from './Document';
+import {DocumentBaseOptions} from './DocumentBaseOptions';
 
-export type DocumentOptions = {
-  id: number;
-  type: DocumentType;
-  name: string;
+export type DocumentOptions = DocumentBaseOptions & {
   description: string;
-  url: string;
   createdAt: string;
-  owner: UserOptions;
   comments: CommentOptions[];
   parent: Document;
-  children: DocumentOptions[];
 };
