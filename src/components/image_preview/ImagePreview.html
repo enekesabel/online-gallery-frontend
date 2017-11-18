@@ -4,8 +4,16 @@
     <slot name="button"></slot>
   </div>
   </div>
-  <img :src="document.url" class="img-fluid"/>
+  <img :src="document.url" @click="openImage()" class="img-fluid preview-image"/>
   <div class="p-2">
     {{document.comments.length}} comments
   </div>
+
+  <el-dialog
+    :visible.sync="dialogVisible"
+    width="95%"
+    :before-close="handleClose">
+    <image-view :image="document"></image-view>
+  </el-dialog>
 </el-card>
+
