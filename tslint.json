@@ -16,6 +16,7 @@
       "allow-leading-underscore"
     ],
     "ter-arrow-parens": false,
-    "radix": false
+    "radix": false,
+    "function-name": false
   }
 }

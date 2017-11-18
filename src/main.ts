@@ -8,6 +8,7 @@ import './hooks'; // This must be imported before any component
 
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 Vue.config.productionTip = false;
 
@@ -17,6 +18,7 @@ Vue.use(Element);
 new Vue({
   router,
   el: '#app',
+  store,
   template: '<App/>',
   components: { App },
 });
