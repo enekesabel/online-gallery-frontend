@@ -1,7 +1,8 @@
 import {UserOptions} from './UserOptions';
 import {DocumentType} from './DocumentType';
+import {HasId} from "./HasId";
 
-export type DocumentBaseOptions = {
+export type DocumentBaseOptions = HasId & {
   id: number;
   type: DocumentType;
   name: string;

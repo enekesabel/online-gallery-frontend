@@ -8,4 +8,8 @@ export default class App extends Vue {
 
   private visible: boolean = false;
 
+  mounted() {
+    this.$store.dispatch('fetchDocument', {documentId: ''});
+  }
+
 }
