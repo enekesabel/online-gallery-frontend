@@ -8,14 +8,14 @@ export abstract class AbstractApi<T extends HasId> {
   }
 
   async get(id: string): Promise<T> {
-    return new Promise<T>(() => {
-      return this.createEntity({});
+    return new Promise<T>((resolve, reject) => {
+      resolve(this.createEntity({}));
     });
   }
 
   async getAll(): Promise<T[]> {
-    return new Promise<T[]>(() => {
-      return [this.createEntity({})];
+    return new Promise<T[]>((resolve, reject) => {
+      resolve([this.createEntity({})]);
     });
   }
 

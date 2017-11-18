@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import document from './modules/Documents';
+import DocumentStore from './modules/DocumentStore';
 
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    document,
+    documentStore: DocumentStore,
   },
 });
 
