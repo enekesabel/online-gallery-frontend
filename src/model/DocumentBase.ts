@@ -9,6 +9,8 @@ export class DocumentBase implements DocumentBaseOptions {
   private _owner: User;
   protected _type: DocumentType;
   protected _parent: DocumentBase;
+  private _comments: any[] = [];
+  private _children: any[] = [];
 
   constructor(options: DocumentBaseOptions) {
     this._id = options.id;
@@ -20,6 +22,10 @@ export class DocumentBase implements DocumentBaseOptions {
       this._owner = new User(options.owner);
     }
     this._type = options.type;
+    this._comments = options.comments;
+    if (options.children) {
+      this._children = options.children;
+    }
   }
 
   get id(): number {
@@ -50,4 +56,11 @@ export class DocumentBase implements DocumentBaseOptions {
     return this._parent;
   }
 
+  get comments(): any[] {
+    return this._comments;
+  }
+
+  get children(): any[] {
+    return this._children;
+  }
 }

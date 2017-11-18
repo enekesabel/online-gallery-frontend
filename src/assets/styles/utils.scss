@@ -1,0 +1,49 @@
+@import './vars';
+
+.text-primary {
+  color: $text-primary;
+}
+
+.text-secondary {
+  color: $text-secondary;
+}
+
+.text-regular {
+  color: $text-regular;
+}
+
+.text-placeholder {
+  color: $text-placeholder;
+}
+
+.color-success {
+  color: $success;
+}
+
+.color-warning {
+  color: $warning;
+}
+
+.color-info {
+  color: $info;
+}
+
+.color-danger {
+  color: $danger;
+}
+
+.bg-color-success {
+  background-color: $success;
+}
+
+.bg-color-warning {
+  background-color: $warning;
+}
+
+.bg-color-info {
+  background-color: $info;
+}
+
+.bg-color-danger {
+  background-color: $danger;
+}

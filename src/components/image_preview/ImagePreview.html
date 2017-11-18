@@ -1,0 +1,11 @@
+<el-card :body-style="{ padding: '0px' }">
+  <div slot="header" class="d-flex align-items-center justify-content-between">
+    <span>{{document.name}}</span>
+    <slot name="button"></slot>
+  </div>
+  </div>
+  <img :src="document.url" class="img-fluid"/>
+  <div class="p-2">
+    {{document.comments.length}} comments
+  </div>
+</el-card>

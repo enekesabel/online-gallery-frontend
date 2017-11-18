@@ -53,8 +53,6 @@ const actions = {
   async fetchDocument({commit}, {documentId}) {
     const api = new DocumentApi();
     const document = await api.get(documentId);
-
-    console.log('fetchedDocument', document);
     commit(MutationType.SET_DOCUMENT, document);
   },
 };
