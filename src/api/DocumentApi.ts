@@ -29,6 +29,13 @@ export class DocumentApi extends AbstractApi<Document> {
       parent: null,
       createdAt: new Date().toDateString(),
     };
+
+    const children = [];
+    children.push(options);
+    children.push(options);
+
+    options.children = children;
+
     return this.factory.getDocument(options);
   }
 
