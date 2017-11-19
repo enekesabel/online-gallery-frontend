@@ -23,16 +23,22 @@ export abstract class AbstractApi<T extends HasId> {
     });
   }
 
-  create(t: T) {
-
+  async create(t: T) {
+    return new Promise<T>((resolve, reject) => {
+      resolve(t);
+    });
   }
 
-  delete(id: string) {
-
+  async delete(id: string) {
+    return new Promise<T>((resolve, reject) => {
+      resolve();
+    });
   }
 
-  update(id: string, t: T) {
-
+  async update(id: string, t: T) {
+    return new Promise<T>((resolve, reject) => {
+      resolve(t);
+    });
   }
 
   abstract createEntity(o: Object): T;
