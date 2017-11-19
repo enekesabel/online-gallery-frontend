@@ -61,7 +61,7 @@ const mutations = {
       state.groups.push(group);
     }
   },
-  [MutationType.SET_GROUP](state: State, groupId: string) {
+  [MutationType.DELETE_GROUP](state: State, groupId: string) {
     const groupIndex = state.groups.findIndex(g => {
       return g.id === groupId;
     });

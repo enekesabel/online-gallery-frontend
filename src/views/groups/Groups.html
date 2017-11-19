@@ -5,6 +5,7 @@
       <template slot="title">
         <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
         <el-button type="text" @click.stop="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
+        <el-button type="text" @click.stop="deleteGroup(group)"><i class="el-icon-delete fa-lg ml-2 color-danger"></i></el-button>
       </template>
       <div class="ml-4">
         <user-component v-for="user in group.users" :user="user"></user-component>
