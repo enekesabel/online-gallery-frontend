@@ -15,7 +15,11 @@ export abstract class AbstractApi<T extends HasId> {
 
   async getAll(): Promise<T[]> {
     return new Promise<T[]>((resolve, reject) => {
-      resolve([this.createEntity({})]);
+      const results = [];
+      for (let i = 0; i < 5; i++) {
+        results.push(this.createEntity({}));
+      }
+      resolve(results);
     });
   }
 

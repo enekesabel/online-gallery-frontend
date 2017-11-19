@@ -1,3 +1,14 @@
-<div class="hello">
-  <h1>Groups</h1>
+<div>
+  <h4 class="mb-4">Groups</h4>
+  <el-collapse accordion>
+    <el-collapse-item v-for="group in groups">
+      <template slot="title">
+        <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
+        <el-button type="text" @click="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
+      </template>
+      <div class="ml-4">
+        <user-component v-for="user in group.users" :user="user"></user-component>
+      </div>
+    </el-collapse-item>
+  </el-collapse>
 </div>

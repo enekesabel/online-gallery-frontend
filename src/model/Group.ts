@@ -4,7 +4,7 @@ import {User} from './User';
 export class Group implements GroupOptions {
   private _name: string;
   private _id: string | number;
-  private _users: User[];
+  private _users: User[] = [];
 
   constructor(options: GroupOptions) {
     this._name = options.name;
