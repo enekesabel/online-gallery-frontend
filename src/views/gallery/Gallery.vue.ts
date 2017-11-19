@@ -22,4 +22,11 @@ export default class Gallery extends Vue {
   get document(): Document {
     return this.$store.getters.getDocument;
   }
+
+
+  handleCommand(command) {
+    switch (command) {
+    }
+  }
+
 }
