@@ -13,13 +13,21 @@ export default class Groups extends Vue {
 
   private editDialogVisible: boolean = false;
   private selectedGroup: Group;
+  private editDialogTitle: string = 'Editing group'
 
   get groups(): Group[] {
     return this.$store.getters.getGroups;
   }
 
   editGroup(group: Group) {
+    this.editDialogTitle = 'Editing group';
     this.selectedGroup = group;
+    this.editDialogVisible = true;
+  }
+
+  createGroup() {
+    this.selectedGroup = new Group();
+    this.editDialogTitle = 'Creating group';
     this.editDialogVisible = true;
   }
 

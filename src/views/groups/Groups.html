@@ -1,5 +1,8 @@
 <div>
-  <h4 class="mb-4">Groups</h4>
+  <div class="mb-4 d-flex justify-content-between align-items-center">
+    <h4 class="m-0">Groups</h4>
+    <el-button type="primary" icon="el-icon-circle-plus-outline" @click="createGroup">Add</el-button>
+  </div>
   <el-collapse accordion>
     <el-collapse-item v-for="group in groups">
       <template slot="title">
@@ -13,7 +16,7 @@
     </el-collapse-item>
   </el-collapse>
   <el-dialog
-    title="Editing group"
+    :title="editDialogTitle"
     :visible.sync="editDialogVisible"
     width="600px"
     :before-close="handleClose">

@@ -33,16 +33,29 @@ export default class GroupEditor extends Vue {
   save() {
     this.$refs.form.validate((valid) => {
       if (valid) {
+
+        // if editing group
+        if (this.group.id && this.group.id !== '') {
+          this.$store.dispatch('updateGroup', {
+            group: new Group({
+              id: this.group.id,
+              name: this.form.name,
+              users: this.selectedUsers,
+            }),
+          });
+        } else {
+          // if creating group
+        }
+
         this.$emit('saved');
       } else {
-        console.log('error submit!!');
         return false;
       }
     });
   }
 
   get titles() {
-    return ['Users', this.group.name];
+    return ['Users', this.group.name === '' ? (this.form.name || 'Group') : this.form.name];
   }
 
   get users(): User[] {
@@ -51,6 +64,12 @@ export default class GroupEditor extends Vue {
     } else {
       return [];
     }
+  }
+
+  get selectedUsers(): User[] {
+    return this.users.filter(u => {
+      return this.selectedUserIds.indexOf(u.id) > -1;
+    });
   }
 
   get parsedUsers() {
