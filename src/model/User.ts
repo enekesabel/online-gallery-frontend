@@ -1,11 +1,11 @@
-import {UserOptions} from "./UserOptions";
+import {UserOptions} from './UserOptions';
 
 export class User implements UserOptions{
   private _id: string;
   private _name: string;
   private _email: string;
 
-  constructor(options: UserOptions){
+  constructor(options: UserOptions) {
     this._id = options.id;
     this._name = options.name;
     this._email = options.email;
