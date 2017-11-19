@@ -4,6 +4,7 @@ import Home from '../views/home/Home.vue';
 import Settings from '../views/settings/Settings.vue';
 import Gallery from '../views/gallery/Gallery.vue';
 import Users from '../views/users/Users.vue';
+import Groups from '../views/groups/Groups.vue';
 import Auth from '../views/auth/Auth.vue';
 import Login from '../components/login/Login.vue';
 import Signup from '../components/signup/Signup.vue';
@@ -22,22 +23,27 @@ export default new Router({
           path: '',
           component: Gallery,
         },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: Settings,
+        },
+        {
+          path: '/gallery',
+          name: 'gallery',
+          component: Gallery,
+        },
+        {
+          path: '/users',
+          name: 'users',
+          component: Users,
+        },
+        {
+          path: '/groups',
+          name: 'groups',
+          component: Groups,
+        },
       ],
-    },
-    {
-      path: '/settings',
-      name: 'settings',
-      component: Settings,
-    },
-    {
-      path: '/gallery',
-      name: 'gallery',
-      component: Gallery,
-    },
-    {
-      path: '/users',
-      name: 'users',
-      component: Users,
     },
     {
       path: '/auth',

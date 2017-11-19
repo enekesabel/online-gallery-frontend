@@ -7,7 +7,7 @@ import WithRender from './App.html?style=./App.scss';
 export default class App extends Vue {
 
   mounted() {
-    // this.$store.dispatch('fetchDocument', {documentId: ''});
+    this.$store.dispatch('fetchDocument', {documentId: ''});
   }
 
 }
