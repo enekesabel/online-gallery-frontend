@@ -17,10 +17,11 @@
     width="600px"
     :before-close="handleClose">
     <div class="d-flex justify-content-center">
-      <group-editor v-if="editDialogVisible" :group="selectedGroup"></group-editor>
+      <group-editor v-if="editDialogVisible"
+                    @cancel="editDialogVisible = false"
+                    @saved="editDialogVisible = false"
+                    :group="selectedGroup"></group-editor>
     </div>
-    <el-button @click="editDialogVisible = false">Cancel</el-button>
-    <el-button type="primary" @click="dialogVisible = false">Save</el-button>
   </span>
   </el-dialog>
 </div>

@@ -13,10 +13,31 @@ export default class GroupEditor extends Vue {
   private group: Group;
 
   private selectedUserIds = [];
+  private form = {
+    name: '',
+  };
+  private rules = {
+    name: [
+      {required: true, message: 'Please input the group name', trigger: 'blur'},
+      {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
+    ],
+  };
 
   mounted() {
     this.group.users.forEach(u => {
       this.selectedUserIds.push(u.id);
+    });
+    this.form.name = this.group.name;
+  }
+
+  save() {
+    this.$refs.form.validate((valid) => {
+      if (valid) {
+        this.$emit('saved');
+      } else {
+        console.log('error submit!!');
+        return false;
+      }
     });
   }
 
