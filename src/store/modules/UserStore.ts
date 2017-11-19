@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import {User} from "../../model/User";
+import {User} from '../../model/User';
+import {UserApi} from '../../api/UserApi';
 
 enum MutationType {
-  SET_DOCUMENT = 'SET_DOCUMENT',
-  ADD_CHILD = 'ADD_CHILD',
-  SET_CHILD = 'SET_CHILD',
-  REMOVE_CHILD = 'REMOVE_CHILD',
+  SET_USERS = 'SET_USERS',
 }
 
 class State {
@@ -19,39 +16,16 @@ const getters = {
 };
 
 const actions = {
-  async fetchUsers({commit}, {documentId}) {
-    const api = new DocumentApi();
-    const document = await api.get(documentId);
-    commit(MutationType.SET_DOCUMENT, document);
+  async fetchUsers({commit}) {
+    const api = new UserApi();
+    const users = await api.getAll();
+    commit(MutationType.SET_USERS, users);
   },
 };
 
 const mutations = {
-  [MutationType.SET_DOCUMENT](state: State, document: Document) {
-    state.document = document;
-  },
-  [MutationType.ADD_CHILD](state: State, documentChild: DocumentBase) {
-    if (state.document.type === DocumentType.ALBUM) {
-      (<Album>state.document).children.push(documentChild);
-    }
-  },
-  [MutationType.REMOVE_CHILD](state: State, childId) {
-    if (state.document.type === DocumentType.ALBUM) {
-      const album = (<Album>state.document);
-      const index = album.children.findIndex(c => {
-        return c.id === childId;
-      });
-      album.children.splice(index, 1);
-    }
-  },
-  [MutationType.SET_CHILD](state: State, child: DocumentBase) {
-    if (state.document.type === DocumentType.ALBUM) {
-      const album = (<Album>state.document);
-      const index = album.children.findIndex(c => {
-        return c.id === child.id;
-      });
-      album.children[index] = child;
-    }
+  [MutationType.SET_USERS](state: State, users: User[]) {
+    state.users = users;
   },
 };
 
