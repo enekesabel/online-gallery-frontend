@@ -28,6 +28,27 @@ export class DocumentApi extends AbstractApi<Document> {
 
     const date = new Date().toDateString();
 
+    const comments = [
+      {
+        id: 0,
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        createdAt: date,
+        user: owner,
+      },
+      {
+        id: 0,
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        createdAt: date,
+        user: owner,
+      },
+      {
+        id: 0,
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        createdAt: date,
+        user: owner,
+      },
+    ];
+
     const options: AlbumOptions = {
       id: null,
       url: '',
@@ -35,26 +56,7 @@ export class DocumentApi extends AbstractApi<Document> {
       type: DocumentType.ALBUM,
       description: 'This is my first album',
       name: 'My album',
-      comments: [
-        {
-          id: 0,
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          createdAt: date,
-          user: owner,
-        },
-        {
-          id: 0,
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          createdAt: date,
-          user: owner,
-        },
-        {
-          id: 0,
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          createdAt: date,
-          user: owner,
-        },
-      ],
+      comments,
       children: [],
       parent: null,
       createdAt: date,
@@ -64,7 +66,7 @@ export class DocumentApi extends AbstractApi<Document> {
       id: null,
       name: 'My first image',
       description: 'asdasd',
-      comments: [],
+      comments,
       owner,
       parent: null,
       createdAt: date,
