@@ -1,14 +1,13 @@
 <el-container>
   <el-header>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">Gallery</el-menu-item>
-      <el-menu-item index="2">Users</el-menu-item>
-      <el-menu-item index="3">Groups</el-menu-item>
+    <el-menu :router="true" default-active="/gallery" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="/gallery">Gallery</el-menu-item>
+      <el-menu-item index="/users">Users</el-menu-item>
+      <el-menu-item index="/groups">Groups</el-menu-item>
       <el-menu-item style="float: right;" index="4">Profile</el-menu-item>
     </el-menu>
   </el-header>
   <el-main>
     <router-view></router-view>
   </el-main>
-  <el-footer>Footer</el-footer>
 </el-container>
