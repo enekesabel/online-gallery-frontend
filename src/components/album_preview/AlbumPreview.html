@@ -1,0 +1,13 @@
+<el-card class="folder" :body-style="{ padding: '0px' }">
+  <div slot="header" class="d-flex align-items-center justify-content-between">
+    <div>
+      <span class="fa fa-lg fa-folder mr-2 color-info"></span>
+      <span>{{document.name}}</span>
+    </div>
+    <slot name="button"></slot>
+  </div>
+  <div class="d-flex align-items-center justify-content-between p-2">
+    <span>{{document.comments.length}} comments</span>
+    <span>{{document.children.length}} items</span>
+  </div>
+</el-card>

@@ -1,0 +1,4 @@
+.comments .comment-input >>> textarea {
+  resize: none;
+  overflow: hidden;
+}

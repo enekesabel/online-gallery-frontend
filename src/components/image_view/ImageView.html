@@ -1,0 +1,14 @@
+<el-row class="mr-0">
+  <el-col :sm="24" :md="16" class="text-center">
+    <img :src="image.url" class="img-fluid">
+    <p class="text-left">
+      Created at: {{image.createdAt}}
+    </p>
+  </el-col>
+  <el-col :md="8">
+    <p>{{image.description}}</p>
+  </el-col>
+  <el-col>
+    <comments :document="image"></comments>
+  </el-col>
+</el-row>

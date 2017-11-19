@@ -12,8 +12,7 @@ export class Album extends Document implements AlbumOptions {
     super(options);
     options.children.forEach(document => {
       const documentOption: DocumentBaseOptions = document;
-      documentOption.parent = this;
-      document.parent = this;
+      // documentOption.parent = this;
       this._children.push(new DocumentBase(documentOption));
     });
   }

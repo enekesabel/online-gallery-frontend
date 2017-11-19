@@ -1,0 +1,16 @@
+<div class="comments">
+  <p v-if="document.comments.length === 0" class="text-placeholder">
+    There are no comments yet
+  </p>
+  <comment-component v-for="comment in document.comments" :comment="comment"></comment-component>
+  <div class="d-flex mt-4 align-items-start">
+    <el-input
+      class="comment-input mr-2"
+      type="textarea"
+      autosize
+      placeholder="Comment something"
+      v-model="newComment">
+    </el-input>
+    <el-button type="primary" @click="addComment">Comment</el-button>
+  </div>
+</div>

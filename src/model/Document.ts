@@ -6,7 +6,6 @@ import {DocumentBase} from './DocumentBase';
 export abstract class Document extends DocumentBase implements DocumentOptions {
   private _description: string;
   private _createdAt: string;
-  private _comments: Comment[] = [];
   protected _parent: Document = null;
 
   constructor(options: DocumentOptions) {
@@ -30,10 +29,6 @@ export abstract class Document extends DocumentBase implements DocumentOptions {
 
   get createdAt(): string {
     return this._createdAt;
-  }
-
-  get comments(): Comment[] {
-    return this._comments;
   }
 
   get parent(): Document {

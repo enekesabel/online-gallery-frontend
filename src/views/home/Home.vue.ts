@@ -13,5 +13,4 @@ export default class Home extends Vue {
   @Prop({ type: Boolean, default: true })
   ecosystem: boolean;
 
-  msg = 'Welcome to Your Vue.js App';
 }

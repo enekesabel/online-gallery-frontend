@@ -1,15 +1,32 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import WithRender from './Gallery.html?style=./Gallery.scss';
-
-import {Prop} from 'vue-property-decorator';
-import {Album} from '../../model/Album';
+import {DocumentBase} from '../../model/DocumentBase';
+import DocumentPreview from '../../components/document_perview/DocumentPreview.vue';
+import Comments from '../../components/comments/Comments.vue';
+import {Document} from '../../model/Document';
 
 @WithRender
-@Component
+@Component({
+  components: {
+    DocumentPreview,
+    Comments,
+  },
+})
 export default class Gallery extends Vue {
-  @Prop({
-    required: false,
-  })
-  private root: Album;
+
+  get children(): DocumentBase[] {
+    return this.$store.getters.getChildren;
+  }
+
+  get document(): Document {
+    return this.$store.getters.getDocument;
+  }
+
+
+  handleCommand(command) {
+    switch (command) {
+    }
+  }
+
 }

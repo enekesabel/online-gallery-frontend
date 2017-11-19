@@ -5,8 +5,6 @@ import {DocumentFactory} from '../../model/DocumentFactory';
 import {DocumentBase} from '../../model/DocumentBase';
 import {Album} from '../../model/Album';
 import {DocumentType} from '../../model/DocumentType';
-import {GetterTree} from 'vuex';
-
 const factory = new DocumentFactory();
 
 enum MutationType {
@@ -17,7 +15,22 @@ enum MutationType {
 }
 
 class State {
-  document: Document;
+  document: Document = new Album({
+    type: DocumentType.ALBUM,
+    name: '',
+    createdAt: '',
+    description: '',
+    id: 0,
+    url: '',
+    owner: {
+      id: 1,
+      name: 'Me',
+      email: 'asd@email.com',
+    },
+    parent: null,
+    comments: [],
+    children: [],
+  });
 }
 
 const getters = {
@@ -40,8 +53,6 @@ const actions = {
   async fetchDocument({commit}, {documentId}) {
     const api = new DocumentApi();
     const document = await api.get(documentId);
-
-    console.log('fetchedDocument', document);
     commit(MutationType.SET_DOCUMENT, document);
   },
 };
