@@ -4,11 +4,23 @@
     <el-collapse-item v-for="group in groups">
       <template slot="title">
         <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
-        <el-button type="text" @click="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
+        <el-button type="text" @click.stop="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
       </template>
       <div class="ml-4">
         <user-component v-for="user in group.users" :user="user"></user-component>
       </div>
     </el-collapse-item>
   </el-collapse>
+  <el-dialog
+    title="Editing group"
+    :visible.sync="editDialogVisible"
+    width="600px"
+    :before-close="handleClose">
+    <div class="d-flex justify-content-center">
+      <group-editor v-if="editDialogVisible" :group="selectedGroup"></group-editor>
+    </div>
+    <el-button @click="editDialogVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogVisible = false">Save</el-button>
+  </span>
+  </el-dialog>
 </div>
