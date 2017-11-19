@@ -18,6 +18,22 @@
       <document-preview :document="child"></document-preview>
     </el-col>
   </el-row>
+  <el-row class="mt-5">
+    <el-col :sm="24" class="text-center">
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+        <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+      </el-upload>
+    </el-col>
+  </el-row>
   <div class="divider my-4"></div>
   <el-row>
     <el-col :sm="24">

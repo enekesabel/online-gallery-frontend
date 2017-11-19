@@ -12,7 +12,7 @@ import ImageView from '../image_view/ImageView.vue';
     ImageView,
   },
 })
-export default class AlbumPreview extends Vue {
+export default class ImagePreview extends Vue {
   @Prop()
   document: DocumentBase;
 

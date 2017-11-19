@@ -11,7 +11,8 @@
 
   <el-dialog
     :visible.sync="dialogVisible"
-    width="95%"
+    :fullscreen="true"
+    :title="document.name"
     :before-close="handleClose">
     <image-view :image="document"></image-view>
   </el-dialog>
