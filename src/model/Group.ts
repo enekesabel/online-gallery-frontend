@@ -4,14 +4,18 @@ import {User} from './User';
 export class Group implements GroupOptions {
   private _name: string;
   private _id: string | number;
-  private _users: User[];
+  private _users: User[] = [];
 
-  constructor(options: GroupOptions) {
-    this._name = options.name;
-    this._id = options.id;
-    options.users.forEach(userOption => {
-      this.users.push(new User(userOption));
-    });
+  constructor(options?: GroupOptions)  {
+    this._name = options && options.name || '';
+    this._id = options && options.id || '';
+    if (options && options.users) {
+      options.users.forEach(userOption => {
+        this.users.push(new User(userOption));
+      });
+    } else {
+      this._users = [];
+    }
   }
 
   get name(): string {

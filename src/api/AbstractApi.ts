@@ -15,20 +15,30 @@ export abstract class AbstractApi<T extends HasId> {
 
   async getAll(): Promise<T[]> {
     return new Promise<T[]>((resolve, reject) => {
-      resolve([this.createEntity({})]);
+      const results = [];
+      for (let i = 0; i < 5; i++) {
+        results.push(this.createEntity({}));
+      }
+      resolve(results);
     });
   }
 
-  create(t: T) {
-
+  async create(t: T) {
+    return new Promise<T>((resolve, reject) => {
+      resolve(t);
+    });
   }
 
-  delete(id: string) {
-
+  async delete(id: string) {
+    return new Promise<T>((resolve, reject) => {
+      resolve();
+    });
   }
 
-  update(id: string, t: T) {
-
+  async update(id: string, t: T) {
+    return new Promise<T>((resolve, reject) => {
+      resolve(t);
+    });
   }
 
   abstract createEntity(o: Object): T;
