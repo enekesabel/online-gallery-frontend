@@ -1,7 +1,9 @@
 import {HasId} from '../model/HasId';
+import Vue from 'vue';
+
 
 export abstract class AbstractApi<T extends HasId> {
-  private url: string;
+  protected url: string;
 
   constructor(url: string) {
     this.url = url;

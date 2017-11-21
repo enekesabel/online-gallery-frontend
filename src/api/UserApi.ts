@@ -1,6 +1,7 @@
 import {AbstractApi} from './AbstractApi';
 import {User} from '../model/User';
 import {UserOptions} from '../model/UserOptions';
+import Vue from 'vue';
 
 export class UserApi extends AbstractApi<User> {
 
@@ -22,5 +23,15 @@ export class UserApi extends AbstractApi<User> {
     return owner;
   }
 
+  async create(u: User) {
+    return new Promise((resolve, reject) => {
+      Vue.axios.post(this.url + '/register', u).then(response => {
+        resolve(response);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+
+  }
 
 }

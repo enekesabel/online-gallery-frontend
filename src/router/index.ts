@@ -18,6 +18,9 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        auth: true,
+      },
       children: [
         {
           path: '',
@@ -49,6 +52,9 @@ export default new Router({
       path: '/auth',
       components: {
         notLoggedIn: Auth,
+      },
+      meta: {
+        auth: false,
       },
       children: [
         {
