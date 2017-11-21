@@ -1,6 +1,6 @@
 <el-container>
   <el-header>
-    <el-menu :router="true" default-active="/gallery" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu :router="true" :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="/gallery">Gallery</el-menu-item>
       <el-menu-item index="/users">Users</el-menu-item>
       <el-menu-item index="/groups">Groups</el-menu-item>

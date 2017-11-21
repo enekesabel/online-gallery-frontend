@@ -5,6 +5,8 @@ import Vue from 'vue';
 
 export class UserApi extends AbstractApi<User> {
 
+  static count: number = 0;
+
   constructor() {
     super('/users');
   }
@@ -16,10 +18,11 @@ export class UserApi extends AbstractApi<User> {
 
   getDummyUserOptions(): UserOptions {
     const owner = {
-      id: 1,
-      name: 'Me',
+      id: UserApi.count,
+      name: 'User ' + UserApi.count,
       email: 'asd@email.com',
     };
+    UserApi.count++;
     return owner;
   }
 

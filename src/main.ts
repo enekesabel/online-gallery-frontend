@@ -14,10 +14,11 @@ import './hooks'; // This must be imported before any component
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import locale from 'element-ui/lib/locale/lang/en';
 
 Vue.config.productionTip = false;
 
-Vue.use(Element);
+Vue.use(Element, { locale });
 Vue.use(VueAxios, axios);
 
 Vue.router = router
