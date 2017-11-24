@@ -41,19 +41,7 @@ export default class Groups extends Vue {
       cancelButtonText: 'Cancel',
       type: 'warning',
     }).then(() => {
-      this.$store.dispatch('deleteGroup', {groupId: group.id})
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: 'Delete completed',
-          });
-        })
-        .catch(err => {
-          this.$message({
-            type: 'error',
-            message: 'Error occurred during deleting group',
-          });
-        });
+      this.$store.dispatch('deleteGroup', {groupId: group.id});
     }).catch(() => {
       this.$message({
         type: 'info',

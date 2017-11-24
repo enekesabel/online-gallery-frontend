@@ -63,8 +63,9 @@ const actions = {
     try {
       await api.delete(groupId);
       commit(MutationType.DELETE_GROUP, groupId);
+      MessageBus.showSuccess('Delete completed');
     } catch (err) {
-      console.log(err)
+      MessageBus.showError('Error occurred when deleting group.');
     }
   },
 };
