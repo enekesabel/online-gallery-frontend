@@ -1,8 +1,9 @@
 import {HasId} from '../model/HasId';
+import {Serializable} from '../model/Serializable';
 import Vue from 'vue';
 
 
-export abstract class AbstractApi<T extends HasId> {
+export abstract class AbstractApi<T extends HasId & Serializable> {
   protected url: string;
 
   constructor(url: string) {
@@ -31,7 +32,7 @@ export abstract class AbstractApi<T extends HasId> {
 
   async create(t: T) {
     return new Promise<any>((resolve, reject) => {
-      Vue.axios.post(this.url, t).then(response => {
+      Vue.axios.post(this.url, t.toObject()).then(response => {
         resolve(response);
       }).catch(err => {
         reject(err);
@@ -51,7 +52,7 @@ export abstract class AbstractApi<T extends HasId> {
 
   async update(id: string, t: T) {
     return new Promise<any>((resolve, reject) => {
-      Vue.axios.path(this.url + '/' + id, t).then(response => {
+      Vue.axios.path(this.url + '/' + id, t.toObject()).then(response => {
         resolve(response);
       }).catch(err => {
         reject(err);

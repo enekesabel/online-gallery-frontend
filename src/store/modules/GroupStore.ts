@@ -52,6 +52,8 @@ const actions = {
     }
   },
   async createGroup({commit}, {group}) {
+    console.log(group)
+    console.log(JSON.stringify(group))
     const newGroup = await  api.create(group);
     commit(MutationType.SET_GROUP, newGroup);
   },

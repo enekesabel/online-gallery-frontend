@@ -1,12 +1,14 @@
 import {GroupOptions} from './GroupOptions';
 import {User} from './User';
+import {Serializable} from "./Serializable";
+import {UserOptions} from "./UserOptions";
 
-export class Group implements GroupOptions {
+export class Group implements GroupOptions, Serializable {
   private _name: string;
   private _id: string | number;
   private _users: User[] = [];
 
-  constructor(options?: GroupOptions)  {
+  constructor(options?: GroupOptions) {
     this._name = options && options.name || '';
     this._id = options && options.id || '';
     if (options && options.users) {
@@ -28,5 +30,17 @@ export class Group implements GroupOptions {
 
   get users(): User[] {
     return this._users;
+  }
+
+  toObject(): GroupOptions {
+    const users: UserOptions[] = [];
+    this.users.forEach(user => {
+      users.push(user.toObject());
+    });
+    return {
+      id: this.id,
+      name: this.name,
+      users,
+    };
   }
 }

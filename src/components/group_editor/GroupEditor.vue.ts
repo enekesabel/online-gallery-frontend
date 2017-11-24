@@ -44,7 +44,13 @@ export default class GroupEditor extends Vue {
             }),
           });
         } else {
-          // if creating group
+          this.$store.dispatch('createGroup', {
+            group: new Group({
+              id: this.group.id,
+              name: this.form.name,
+              users: this.selectedUsers,
+            }),
+          });
         }
 
         this.$emit('saved');

@@ -1,6 +1,7 @@
 import {UserOptions} from './UserOptions';
+import {Serializable} from "./Serializable";
 
-export class User implements UserOptions {
+export class User implements UserOptions, Serializable {
   private _id: string;
   private _name: string;
   private _email: string;
@@ -29,5 +30,13 @@ export class User implements UserOptions {
 
   set email(value: string) {
     this._email = value;
+  }
+
+  toObject(): UserOptions {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+    };
   }
 }
