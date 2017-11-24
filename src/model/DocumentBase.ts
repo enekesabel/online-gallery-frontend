@@ -9,8 +9,8 @@ export class DocumentBase implements DocumentBaseOptions {
   private _owner: User;
   protected _type: DocumentType;
   protected _parent: DocumentBase;
-  private _comments: any[] = [];
-  private _children: any[] = [];
+  protected _comments: any[] = [];
+  protected _children: any[] = [];
 
   constructor(options: DocumentBaseOptions) {
     this._id = options.id;

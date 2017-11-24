@@ -1,24 +1,32 @@
 import {Group} from '../../model/Group';
 import {GroupApi} from '../../api/GroupApi';
+import MessageBus from '../../components/message_bus/MessageBus.vue';
 
 const api = new GroupApi();
 
 enum MutationType {
-  SET_GROUPS = 'SET_GROUPS',
+  SET_OWNED_GROUPS = 'SET_OWNED_GROUPS',
+  SET_MEMBER_OF_GROUPS = 'SET_MEMBER_OF_GROUPS',
   SET_GROUP = 'SET_GROUP',
   DELETE_GROUP = 'DELETE_GROUP',
 }
 
 class State {
-  groups: Group[] = [];
+  ownedGroups: Group[] = [];
+  memberOfGroups: Group[] = [];
 }
 
 const getters = {
-  getGroups(state: State): Group[] {
-    return state.groups;
+  getOwnedGroups(state: State): Group[] {
+    return state.ownedGroups;
+  },
+  getMemberOfGroups(state: State): Group[] {
+    return state.memberOfGroups;
   },
   getGroup(state: State, groupId): Group {
-    return state.groups.find(g => {
+    return state.ownedGroups.find(g => {
+      return g.id === groupId;
+    }) || state.memberOfGroups.find(g => {
       return g.id === groupId;
     });
   },
@@ -26,8 +34,22 @@ const getters = {
 
 const actions = {
   async fetchGroups({commit}) {
-    const groups = await api.getAll();
-    commit(MutationType.SET_GROUPS, groups);
+    try {
+      const groups = await api.getAll();
+      const ownedGroups = [];
+      groups.data.ownedGroups.forEach(g => {
+        ownedGroups.push(new Group(g));
+      });
+      const memberOfGroups = [];
+      groups.data.memberOfGroups.forEach(g => {
+        memberOfGroups.push(new Group(g));
+      });
+      commit(MutationType.SET_OWNED_GROUPS, ownedGroups);
+      commit(MutationType.SET_MEMBER_OF_GROUPS, memberOfGroups);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when retrieving groups.');
+    }
   },
   async createGroup({commit}, {group}) {
     const newGroup = await  api.create(group);
@@ -41,32 +63,35 @@ const actions = {
     try {
       await api.delete(groupId);
       commit(MutationType.DELETE_GROUP, groupId);
-    } catch (e) {
-
+    } catch (err) {
+      console.log(err)
     }
   },
 };
 
 const mutations = {
-  [MutationType.SET_GROUPS](state: State, groups: Group[]) {
-    state.groups = groups;
+  [MutationType.SET_OWNED_GROUPS](state: State, groups: Group[]) {
+    state.ownedGroups = groups;
+  },
+  [MutationType.SET_MEMBER_OF_GROUPS](state: State, groups: Group[]) {
+    state.memberOfGroups = groups;
   },
   [MutationType.SET_GROUP](state: State, group: Group) {
-    const groupIndex = state.groups.findIndex(g => {
+    const groupIndex = state.ownedGroups.findIndex(g => {
       return g.id === group.id;
     });
     if (groupIndex !== -1) {
-      state.groups[groupIndex] = group;
+      state.ownedGroups[groupIndex] = group;
     } else {
-      state.groups.push(group);
+      state.ownedGroups.push(group);
     }
   },
   [MutationType.DELETE_GROUP](state: State, groupId: string) {
-    const groupIndex = state.groups.findIndex(g => {
+    const groupIndex = state.ownedGroups.findIndex(g => {
       return g.id === groupId;
     });
     if (groupIndex !== -1) {
-      state.groups.splice(groupIndex, 1);
+      state.ownedGroups.splice(groupIndex, 1);
     }
   },
 };

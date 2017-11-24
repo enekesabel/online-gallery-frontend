@@ -6,7 +6,7 @@ import {DocumentBase} from './DocumentBase';
 
 export class Album extends Document implements AlbumOptions {
   protected _type: DocumentType = DocumentType.ALBUM;
-  private _children: DocumentBase[] = [];
+  protected _children: DocumentBase[] = [];
 
   constructor(options: AlbumOptions) {
     super(options);

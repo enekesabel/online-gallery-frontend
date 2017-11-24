@@ -5,33 +5,11 @@ import {GroupOptions} from '../model/GroupOptions';
 export class GroupApi extends AbstractApi<Group> {
 
   constructor() {
-    super('/groups');
+    super('/usergroups');
   }
 
-  createEntity(o: GroupOptions): Group {
-
-    return new Group(this.getDummyGroupOptions());
+  getAll(): Promise<any> {
+    return super.getAll();
   }
-
-  getDummyGroupOptions(): GroupOptions {
-    const group = {
-      id: 1,
-      name: 'My group',
-      users: [
-        {
-          id: 1,
-          name: 'Me',
-          email: 'asd@email.com',
-        },
-        {
-          id: 2,
-          name: 'You',
-          email: 'asd@email.com',
-        },
-      ],
-    };
-    return group;
-  }
-
 
 }
