@@ -1,10 +1,14 @@
-<el-container>
+<el-container class="container">
   <el-header>
     <el-menu :router="true" :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="/gallery">Gallery</el-menu-item>
       <el-menu-item index="/users">Users</el-menu-item>
       <el-menu-item index="/groups">Groups</el-menu-item>
-      <el-menu-item style="float: right;" index="4">Profile</el-menu-item>
+      <el-submenu index="2" style="float: right;">
+        <template slot="title">Profile</template>
+        <el-menu-item index="/settings">Settings</el-menu-item>
+        <el-menu-item index="/login" @click="logout()">Log out</el-menu-item>
+      </el-submenu>
     </el-menu>
   </el-header>
   <el-main>

@@ -1,6 +1,8 @@
 import {User} from '../../model/User';
 import {UserApi} from '../../api/UserApi';
 
+const api = new UserApi();
+
 enum MutationType {
   SET_USERS = 'SET_USERS',
 }
@@ -17,9 +19,10 @@ const getters = {
 
 const actions = {
   async fetchUsers({commit}) {
-    const api = new UserApi();
     const users = await api.getAll();
     commit(MutationType.SET_USERS, users);
+  },
+  async register({commit}, {user}) {
   },
 };
 

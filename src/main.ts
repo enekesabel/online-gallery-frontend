@@ -18,39 +18,34 @@ import locale from 'element-ui/lib/locale/lang/en';
 
 Vue.config.productionTip = false;
 
-Vue.use(Element, { locale });
-Vue.use(VueAxios, axios);
+Vue.use(Element, {locale});
 
-Vue.router = router
+Vue.use(VueAxios, axios);
+Vue.router = router;
 Vue.axios.defaults.baseURL = process.env.API_URL;
 Vue.prototype.baseUrl = Vue.axios.defaults.baseURL;
 
 Vue.use(VueAuth, {
   auth: {
-    request (req, token) {
-      /*
-      this.options.http._setHeaders.call(this, req, {
-        Authorization: 'Bearer ' + token,
-      });
-      */
+    request(req, token) {
+      this.options.http._setHeaders.call(this, req, {});
     },
-    response (res) {
-      // Get Token from response body
-      // return res.data.token;
+    response(res) {
+      const headers = this.options.http._getHeaders.call(this, res),
+        token = headers.Authorization || headers.authorization;
+
+      return token;
     },
   },
   authRedirect: '/login',
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-  loginData: {url: '/users/login', fetchUser: true},
+  loginData: {url: '/users/login', fetchUser: false},
   logoutData: {url: '/users/logout', method: 'GET', makeRequest: true},
   registerData: {url: '/users/register', method: 'POST', redirect: '/gallery'},
-  fetchData: {enabled: true},
-  parseUserData (data) {
-    return data.data;
-  },
+  fetchData: {enabled: false},
+  refreshData: {enabled: false},
 });
-
 
 // tslint:disable-next-line:no-unused-expression
 new Vue({
@@ -58,5 +53,5 @@ new Vue({
   el: '#app',
   store,
   template: '<App/>',
-  components: { App },
+  components: {App},
 });

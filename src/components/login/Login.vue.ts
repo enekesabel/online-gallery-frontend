@@ -11,6 +11,7 @@ export default class Login extends Vue {
   private loginForm = {
     email: '',
     password: '',
+    name: 'asd', // todo: remove after backed fix
   };
 
   private rules = {
@@ -26,9 +27,36 @@ export default class Login extends Vue {
   login() {
     this.$refs.loginForm.validate((valid) => {
       if (valid) {
-        alert('submit!');
+        this.$auth.login({
+          data: this.loginForm,
+          headers: {
+            'Content-type': 'application/json',
+          },
+          success(re) {
+            Vue.axios({
+              url: '/usergroups',
+              method: 'GET',
+            }).then(res => {
+              console.log(res);
+            }).catch(err => {
+              console.log(err);
+            });
+          },
+          error(err) {
+            this.$message({
+              type: 'error',
+              message: 'Wrong username or password',
+            });
+          },
+        });
+        /*
+        Vue.axios.post('/users/login', this.loginForm, {withCredentials: true}).then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        });
+        */
       } else {
-        console.log('error submit!!');
         return false;
       }
     });

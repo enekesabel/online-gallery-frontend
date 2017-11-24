@@ -26,7 +26,7 @@ export default class Signup extends Vue {
       {required: true, message: 'Please input your password'},
     ],
     passwordConfirm: [
-      { validator: this.validatePass, trigger: 'blur' },
+      {validator: this.validatePass, trigger: 'blur'},
       {required: true, message: 'Please input password confirmation'},
     ],
   };
@@ -44,7 +44,27 @@ export default class Signup extends Vue {
   signup() {
     this.$refs.signupForm.validate((valid) => {
       if (valid) {
-        alert('submit!');
+        this.$auth.register({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: this.signupForm,
+          success (response) {
+            console.log(response);
+          },
+          error (err) {
+            console.log(err);
+            if (err.response) {
+              this.errors = err.response.data.error.errors;
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              this.errors.unknown = err.message;
+            }
+          },
+          autoLogin: true,
+          rememberMe: true,
+          redirect: {name: 'gallery'},
+        });
       } else {
         console.log('error submit!!');
         return false;

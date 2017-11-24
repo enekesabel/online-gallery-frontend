@@ -19,7 +19,7 @@ export default new Router({
       name: 'home',
       component: Home,
       meta: {
-        auth: true,
+        auth: false,
       },
       children: [
         {
@@ -60,25 +60,16 @@ export default new Router({
         {
           path: '',
           component: Login,
-          meta: {
-            auth: false,
-          },
         },
         {
           path: '/login',
           name: 'login',
           component: Login,
-          meta: {
-            auth: false,
-          },
         },
         {
           path: '/signup',
           name: 'signup',
           component: Signup,
-          meta: {
-            auth: false,
-          },
         },
       ],
     },
