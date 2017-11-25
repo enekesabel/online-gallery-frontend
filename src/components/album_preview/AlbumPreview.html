@@ -2,7 +2,7 @@
   <div slot="header" class="d-flex align-items-center justify-content-between">
     <div>
       <span class="fa fa-lg fa-folder mr-2 color-info"></span>
-      <span>{{document.name}}</span>
+      <slot name="documentName"></slot>
     </div>
     <slot name="button"></slot>
   </div>

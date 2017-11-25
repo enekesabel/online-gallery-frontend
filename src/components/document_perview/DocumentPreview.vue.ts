@@ -18,7 +18,12 @@ export default class DocumentPreview extends Vue {
   @Prop({
     required: true,
   })
-  document: DocumentBase;
+  private document: DocumentBase;
+  private documentName: string;
+
+  mounted() {
+    this.documentName = this.document.displayName || '';
+  }
 
   get componentToCreate() {
     if (this.document.type === DocumentType.PICTURE) {
@@ -33,7 +38,14 @@ export default class DocumentPreview extends Vue {
       case 'delete':
         this.openDeleteConfirmation();
         break;
+      case 'rename':
+        this.renameDocument();
+        break;
     }
+  }
+
+  renameDocument() {
+
   }
 
   openDeleteConfirmation() {

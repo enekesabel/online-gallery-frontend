@@ -1,6 +1,6 @@
 <el-card :body-style="{ padding: '0px' }">
   <div slot="header" class="d-flex align-items-center justify-content-between">
-    <span>{{document.name}}</span>
+    <slot name="documentName"></slot>
     <slot name="button"></slot>
   </div>
   </div>
