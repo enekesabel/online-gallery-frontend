@@ -3,5 +3,5 @@ import {ShareType} from './ShareType';
 
 export type AlbumBaseOptions = DocumentBaseOptions & {
   shareType: ShareType;
-  childNumber: number;
+  childCount: number;
 };

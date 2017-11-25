@@ -42,7 +42,7 @@ Vue.use(VueAuth, {
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
   loginData: {url: '/users/login', fetchUser: false},
   logoutData: {makeRequest: false},
-  registerData: {url: '/users/register', method: 'POST', redirect: '/gallery'},
+  registerData: {url: '/users/register', method: 'POST', redirect: '/albums'},
   fetchData: {enabled: false},
   refreshData: {enabled: false},
 });

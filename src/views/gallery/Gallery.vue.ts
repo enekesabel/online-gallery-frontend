@@ -6,6 +6,7 @@ import Comments from '../../components/comments/Comments.vue';
 import {Album} from '../../model/Album';
 import {AlbumBase} from '../../model/AlbumBase';
 import {PictureBase} from '../../model/PictureBase';
+import {Prop, Watch} from 'vue-property-decorator';
 
 @WithRender
 @Component({
@@ -15,6 +16,11 @@ import {PictureBase} from '../../model/PictureBase';
   },
 })
 export default class Gallery extends Vue {
+
+  @Prop({
+    default: '',
+  })
+  private albumId: string;
 
   get childAlbums(): AlbumBase[] {
     return this.$store.getters.getChildAlbums;
@@ -31,6 +37,17 @@ export default class Gallery extends Vue {
   handleCommand(command) {
     switch (command) {
     }
+  }
+
+  mounted() {
+    this.fetchAlbum();
+  }
+
+  @Watch('albumId')
+  fetchAlbum() {
+    console.log('albumId changed')
+    // load child album when routing to it
+      this.$store.dispatch('fetchDocument', this.albumId);
   }
 
 }

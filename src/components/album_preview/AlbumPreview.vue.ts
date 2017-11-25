@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import WithRender from './AlbumPreview.html?style=./AlbumPreview.scss';
-import { Prop } from 'vue-property-decorator';
+import {Prop} from 'vue-property-decorator';
 import {AlbumBase} from '../../model/AlbumBase';
 
 @WithRender
@@ -9,4 +9,9 @@ import {AlbumBase} from '../../model/AlbumBase';
 export default class AlbumPreview extends Vue {
   @Prop()
   document: AlbumBase;
+
+  openAlbum() {
+    this.$router.push(this.$route.path + '/' + this.document.name);
+  }
+
 }

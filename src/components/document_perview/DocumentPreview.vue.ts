@@ -19,10 +19,10 @@ export default class DocumentPreview extends Vue {
     required: true,
   })
   private document: DocumentBase;
-  private documentName: string;
+  private documentName: string = '';
 
   mounted() {
-    this.documentName = this.document.displayName || '';
+    this.documentName = this.document.displayName || this.document.name || '';
   }
 
   get componentToCreate() {

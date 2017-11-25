@@ -24,7 +24,7 @@ export default new Router({
       children: [
         {
           path: '',
-          component: Gallery,
+          redirect: '/albums',
         },
         {
           path: '/profile',
@@ -32,9 +32,12 @@ export default new Router({
           component: Settings,
         },
         {
-          path: '/gallery',
-          name: 'gallery',
+          path: '/albums/*',
+          name: 'albums',
           component: Gallery,
+          props: route => ({
+            albumId: route.params[0],
+          }),
         },
         {
           path: '/users',

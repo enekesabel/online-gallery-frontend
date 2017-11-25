@@ -1,7 +1,7 @@
 <component :is="componentToCreate" :document="document">
   <template slot="documentName">
-    <span>{{documentName}}</span>
-    <el-input :placeholder="document.displayName"
+    <span>{{document.displayName}}</span>
+    <el-input v-if="false" :placeholder="document.displayName"
               size="small"
               v-model="documentName">
       <el-button slot="append" icon="fa fa-lg fa-save"></el-button>

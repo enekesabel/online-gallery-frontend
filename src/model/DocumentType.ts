@@ -1,4 +1,4 @@
 export enum DocumentType{
-  ALBUM = 'album',
-  PICTURE= 'pictures',
+  ALBUM = 'Album',
+  PICTURE= 'Picture',
 }

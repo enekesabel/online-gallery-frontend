@@ -29,7 +29,7 @@ class State {
     parentAlbumId: null,
     childAlbums: [],
     pictures: [],
-    childNumber: 0,
+    childCount: 0,
   });
 }
 
@@ -49,10 +49,14 @@ const getters = {
 
 const actions = {
   async fetchDocument({commit}, documentId: string) {
-    const document = await api.get(documentId);
-    commit(MutationType.SET_ALBUM, document);
+    try {
+      const response = await api.get(documentId);
+      commit(MutationType.SET_ALBUM, response.data);
+    } catch (err) {
+      MessageBus.showError('Error occurred when fetching document.');
+    }
   },
-  async deleteDocument({commit}, documentId:string) {
+  async deleteDocument({commit}, documentId: string) {
     try {
       await api.delete(documentId);
       MessageBus.showSuccess('Delete completed');

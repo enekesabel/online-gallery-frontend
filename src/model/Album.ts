@@ -6,6 +6,7 @@ export class Album extends AlbumBase implements AlbumOptions {
 
   private _childAlbums: AlbumBase[] = [];
   private _pictures: PictureBase[] = [];
+  private _albumTree: { name: string }[] = [];
 
   constructor(options: AlbumOptions) {
     super(options);
@@ -16,6 +17,10 @@ export class Album extends AlbumBase implements AlbumOptions {
     options.pictures.forEach(p => {
       this._pictures.push(new PictureBase(p));
     });
+
+    options.albumTree && options.albumTree.forEach(node => {
+      this._albumTree.push({name: node.name});
+    });
   }
 
   get childAlbums(): AlbumBase[] {
@@ -24,5 +29,9 @@ export class Album extends AlbumBase implements AlbumOptions {
 
   get pictures(): PictureBase[] {
     return this._pictures;
+  }
+
+  get albumTree(): { name: string }[] {
+    return this._albumTree;
   }
 }
