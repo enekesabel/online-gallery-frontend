@@ -52,7 +52,7 @@ export abstract class AbstractApi<T extends HasId & Serializable> {
 
   async update(id: string, t: T) {
     return new Promise<any>((resolve, reject) => {
-      Vue.axios.path(this.url + '/' + id, t.toObject()).then(response => {
+      Vue.axios.patch(this.url + '/' + id, t.toObject()).then(response => {
         resolve(response);
       }).catch(err => {
         reject(err);
