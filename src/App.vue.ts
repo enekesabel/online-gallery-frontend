@@ -11,7 +11,7 @@ export default class App extends Vue {
 
   mounted() {
     this.$store.dispatch('fetchDocument', {documentId: ''});
-    // this.$store.dispatch('fetchUsers');
+    this.$store.dispatch('fetchUsers');
   }
 
 }

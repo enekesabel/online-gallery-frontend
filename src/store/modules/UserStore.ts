@@ -22,7 +22,7 @@ const actions = {
   async fetchUsers({commit}) {
     try {
       const users = await api.getAll();
-      commit(MutationType.SET_USERS, users);
+      commit(MutationType.SET_USERS, users.data);
     } catch (err) {
       console.log(err);
       MessageBus.showError('Error occurred when retrieving users.');

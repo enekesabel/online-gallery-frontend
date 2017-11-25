@@ -20,8 +20,8 @@ export abstract class AbstractApi<T extends HasId & Serializable> {
     });
   }
 
-  async getAll(): Promise<any[]> {
-    return new Promise<any[]>((resolve, reject) => {
+  async getAll(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
       Vue.axios.get(this.url).then(response => {
         resolve(response);
       }).catch(err => {
