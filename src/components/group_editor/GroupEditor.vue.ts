@@ -36,21 +36,17 @@ export default class GroupEditor extends Vue {
 
         // if editing group
         if (this.group.id && this.group.id !== '') {
-          this.$store.dispatch('updateGroup', {
-            group: new Group({
-              id: this.group.id,
-              name: this.form.name,
-              users: this.selectedUsers,
-            }),
-          });
+          this.$store.dispatch('updateGroup', new Group({
+            id: this.group.id,
+            name: this.form.name,
+            users: this.selectedUsers,
+          }));
         } else {
-          this.$store.dispatch('createGroup', {
-            group: new Group({
-              id: this.group.id,
-              name: this.form.name,
-              users: this.selectedUsers,
-            }),
-          });
+          this.$store.dispatch('createGroup', new Group({
+            id: this.group.id,
+            name: this.form.name,
+            users: this.selectedUsers,
+          }));
         }
 
         this.$emit('saved');

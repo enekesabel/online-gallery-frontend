@@ -1,8 +1,8 @@
 import {UserOptions} from './UserOptions';
+import {HasId} from './HasId';
 
-export type GroupOptions = {
+export type GroupOptions = HasId & {
   name: string,
-  id: string,
   users: UserOptions[],
 };
 

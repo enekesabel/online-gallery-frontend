@@ -48,11 +48,11 @@ const getters = {
 };
 
 const actions = {
-  async fetchDocument({commit}, {documentId}) {
+  async fetchDocument({commit}, documentId: string) {
     const document = await api.get(documentId);
     commit(MutationType.SET_ALBUM, document);
   },
-  async deleteDocument({commit}, {documentId}) {
+  async deleteDocument({commit}, documentId:string) {
     try {
       await api.delete(documentId);
       MessageBus.showSuccess('Delete completed');
@@ -61,6 +61,9 @@ const actions = {
       MessageBus.showError('Error occurred when deleting document.');
     }
   },
+  async createAlbum({commit}, {album}) {
+
+  }
 };
 
 const mutations = {

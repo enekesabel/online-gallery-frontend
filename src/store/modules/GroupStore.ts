@@ -51,17 +51,17 @@ const actions = {
       MessageBus.showError('Error occurred when retrieving groups.');
     }
   },
-  async createGroup({commit}, {group}) {
+  async createGroup({commit}, group: Group) {
     console.log(group)
     console.log(JSON.stringify(group))
     const newGroup = await  api.create(group);
     commit(MutationType.SET_GROUP, newGroup);
   },
-  async updateGroup({commit}, {group}) {
+  async updateGroup({commit}, group: Group) {
     const updatedGroup = await  api.update(group.id, group);
     commit(MutationType.SET_GROUP, updatedGroup);
   },
-  async deleteGroup({commit}, {groupId}) {
+  async deleteGroup({commit}, groupId) {
     try {
       await api.delete(groupId);
       commit(MutationType.DELETE_GROUP, groupId);
