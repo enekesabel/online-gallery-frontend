@@ -16,8 +16,8 @@ export default class Login extends Vue {
 
   private rules = {
     email: [
-      {required: true, message: 'Please input your email address', trigger: 'blur'},
-      {type: 'email', message: 'Please input a valid email address', trigger: 'blur'},
+      {required: true, message: 'Please input your emailAddress address', trigger: 'blur'},
+      {type: 'emailAddress', message: 'Please input a valid emailAddress address', trigger: 'blur'},
     ],
     password: [
       {required: true, message: 'Please input your password'},

@@ -20,7 +20,7 @@ export class UserApi extends AbstractApi<User> {
     const owner = {
       id: UserApi.count,
       name: 'User ' + UserApi.count,
-      email: 'asd@email.com',
+      email: 'asd@emailAddress.com',
     };
     UserApi.count++;
     return owner;

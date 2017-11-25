@@ -1,5 +1,6 @@
 import {User} from '../../model/User';
 import {UserApi} from '../../api/UserApi';
+import MessageBus from '../../components/message_bus/MessageBus.vue';
 
 const api = new UserApi();
 
@@ -19,10 +20,13 @@ const getters = {
 
 const actions = {
   async fetchUsers({commit}) {
-    const users = await api.getAll();
-    commit(MutationType.SET_USERS, users);
-  },
-  async register({commit}, {user}) {
+    try {
+      const users = await api.getAll();
+      commit(MutationType.SET_USERS, users);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when retrieving users.');
+    }
   },
 };
 

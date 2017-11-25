@@ -4,12 +4,12 @@ import {Serializable} from './Serializable';
 export class User implements UserOptions, Serializable {
   private _id: string;
   private _name: string;
-  private _email: string;
+  private _emailAddress: string;
 
   constructor(options: UserOptions) {
     this._id = options.id;
     this._name = options.name;
-    this._email = options.email;
+    this._emailAddress = options.emailAddress;
   }
 
   get id(): string {
@@ -24,19 +24,19 @@ export class User implements UserOptions, Serializable {
     this._name = value;
   }
 
-  get email(): string {
-    return this._email;
+  get emailAddress(): string {
+    return this._emailAddress;
   }
 
-  set email(value: string) {
-    this._email = value;
+  set emailAddress(value: string) {
+    this._emailAddress = value;
   }
 
   toObject(): UserOptions {
     return {
       id: this.id,
       name: this.name,
-      email: this.email,
+      emailAddress: this.emailAddress,
     };
   }
 }

@@ -34,7 +34,7 @@ export class DocumentApi extends AbstractApi<DocumentBase> {
     const owner = {
       id: '1',
       name: 'Me',
-      email: 'asd@email.com',
+      emailAddress: 'asd@emailAddress.com',
     };
 
     const date = new Date().toDateString();
