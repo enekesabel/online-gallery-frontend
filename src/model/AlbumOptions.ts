@@ -1,6 +1,7 @@
-import {DocumentOptions} from './DocumentOptions';
-import {DocumentBaseOptions} from './DocumentBaseOptions';
+import {AlbumBaseOptions} from './AlbumBaseOptions';
+import {PictureBaseOptions} from './PictureBaseOptions';
 
-export type AlbumOptions = DocumentOptions & {
-  children: DocumentBaseOptions[],
+export type AlbumOptions = AlbumBaseOptions & {
+  childAlbums: AlbumBaseOptions[];
+  pictures: PictureBaseOptions[];
 };

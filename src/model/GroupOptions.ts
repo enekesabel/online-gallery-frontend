@@ -2,7 +2,7 @@ import {UserOptions} from './UserOptions';
 
 export type GroupOptions = {
   name: string,
-  id: string | number,
+  id: string,
   users: UserOptions[],
 };
 

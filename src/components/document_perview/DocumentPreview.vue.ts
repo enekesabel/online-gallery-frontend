@@ -17,12 +17,11 @@ import ImagePreview from '../image_preview/ImagePreview.vue';
 export default class DocumentPreview extends Vue {
   @Prop({
     required: true,
-    type: DocumentBase,
   })
   document: DocumentBase;
 
   get componentToCreate() {
-    if (this.document.type === DocumentType.IMAGE) {
+    if (this.document.type === DocumentType.PICTURE) {
       return 'image-preview';
     } else {
       return 'album-preview';

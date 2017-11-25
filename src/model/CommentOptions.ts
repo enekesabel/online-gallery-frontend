@@ -1,9 +1,9 @@
-import {UserOptions} from './UserOptions';
-import {HasId} from "./HasId";
+import {HasId} from './HasId';
 
 export type CommentOptions = HasId &  {
-  id: number;
-  user: UserOptions;
+  id: string;
+  userId: string;
+  pictureId: string;
   content: string;
   createdAt: string;
 };

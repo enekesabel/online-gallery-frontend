@@ -1,11 +1,11 @@
 import {GroupOptions} from './GroupOptions';
 import {User} from './User';
-import {Serializable} from "./Serializable";
-import {UserOptions} from "./UserOptions";
+import {Serializable} from './Serializable';
+import {UserOptions} from './UserOptions';
 
 export class Group implements GroupOptions, Serializable {
   private _name: string;
-  private _id: string | number;
+  private _id: string;
   private _users: User[] = [];
 
   constructor(options?: GroupOptions) {
@@ -24,7 +24,7 @@ export class Group implements GroupOptions, Serializable {
     return this._name;
   }
 
-  get id(): string | number {
+  get id(): string {
     return this._id;
   }
 

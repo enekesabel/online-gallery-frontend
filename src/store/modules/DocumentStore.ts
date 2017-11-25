@@ -1,51 +1,47 @@
-import Vue from 'vue';
 import {DocumentApi} from '../../api/DocumentApi';
-import {Document} from '../../model/Document';
-import {DocumentFactory} from '../../model/DocumentFactory';
 import {DocumentBase} from '../../model/DocumentBase';
 import {Album} from '../../model/Album';
 import {DocumentType} from '../../model/DocumentType';
-const factory = new DocumentFactory();
+import {ShareType} from '../../model/ShareType';
+import {AlbumBase} from '../../model/AlbumBase';
+import {PictureBase} from '../../model/PictureBase';
+import {DocumentBaseFactory} from '../../model/DocumentBaseFactory';
+
+const factory: DocumentBaseFactory = new DocumentBaseFactory();
 
 enum MutationType {
-  SET_DOCUMENT = 'SET_DOCUMENT',
+  SET_ALBUM = 'SET_ALBUM',
   ADD_CHILD = 'ADD_CHILD',
   SET_CHILD = 'SET_CHILD',
   REMOVE_CHILD = 'REMOVE_CHILD',
 }
 
 class State {
-  document: Document = new Album({
+  album: Album = new Album({
     type: DocumentType.ALBUM,
     name: '',
-    createdAt: '',
-    description: '',
-    id: 0,
-    url: '',
-    owner: {
-      id: 1,
-      name: 'Me',
-      email: 'asd@email.com',
-    },
-    parent: null,
-    comments: [],
-    children: [],
+    displayName: '',
+    id: '0',
+    ownerUserId: '1',
+    shareType: ShareType.PUBLIC,
+    parentAlbumId: null,
+    childAlbums: [],
+    pictures: [],
+    childNumber: 0,
   });
 }
 
 const getters = {
-  getDocument(state: State):Document {
-    return factory.getDocument(state.document);
+  getAlbum(state: State): Album {
+    return state.album;
   },
 
-  getChildren(state: State): DocumentBase[] {
-    const children = [];
-    if (state.document && state.document.type === DocumentType.ALBUM) {
-      (<Album>state.document).children.forEach(child => {
-        children.push(new DocumentBase(child));
-      });
-    }
-    return children;
+  getChildAlbums(state: State): AlbumBase[] {
+    return state.album.childAlbums;
+  },
+
+  getPictures(state: State): PictureBase[] {
+    return state.album.pictures;
   },
 };
 
@@ -53,35 +49,50 @@ const actions = {
   async fetchDocument({commit}, {documentId}) {
     const api = new DocumentApi();
     const document = await api.get(documentId);
-    commit(MutationType.SET_DOCUMENT, document);
+    commit(MutationType.SET_ALBUM, document);
   },
 };
 
 const mutations = {
-  [MutationType.SET_DOCUMENT](state: State, document: Document) {
-    state.document = document;
+  [MutationType.SET_ALBUM](state: State, album: Album) {
+    state.album = album;
   },
   [MutationType.ADD_CHILD](state: State, documentChild: DocumentBase) {
-    if (state.document.type === DocumentType.ALBUM) {
-      (<Album>state.document).children.push(documentChild);
+    if (documentChild.type === DocumentType.ALBUM) {
+      state.album.childAlbums.push(<AlbumBase>factory.getDocument(documentChild));
+    } else {
+      state.album.pictures.push(<PictureBase>factory.getDocument(documentChild));
     }
   },
   [MutationType.REMOVE_CHILD](state: State, childId) {
-    if (state.document.type === DocumentType.ALBUM) {
-      const album = (<Album>state.document);
-      const index = album.children.findIndex(c => {
+    let index = state.album.childAlbums.findIndex(c => {
+      return c.id === childId;
+    });
+    if (index !== -1) {
+      state.album.childAlbums.splice(index, 1);
+    } else {
+      index = state.album.pictures.findIndex(c => {
         return c.id === childId;
       });
-      album.children.splice(index, 1);
+      if (index !== -1) {
+        state.album.pictures.splice(index, 1);
+      }
     }
   },
   [MutationType.SET_CHILD](state: State, child: DocumentBase) {
-    if (state.document.type === DocumentType.ALBUM) {
-      const album = (<Album>state.document);
-      const index = album.children.findIndex(c => {
+    let index = state.album.childAlbums.findIndex(c => {
+      return c.id === child.id;
+    });
+    if (index !== -1) {
+      state.album.childAlbums[index] = <AlbumBase>factory.getDocument(child);
+
+    } else {
+      index = state.album.pictures.findIndex(c => {
         return c.id === child.id;
       });
-      album.children[index] = child;
+      if (index !== -1) {
+        state.album.pictures[index] = <PictureBase>factory.getDocument(child);
+      }
     }
   },
 };

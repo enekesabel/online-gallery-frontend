@@ -3,8 +3,8 @@ import Component from 'vue-class-component';
 import WithRender from './ImagePreview.html?style=./ImagePreview.scss';
 
 import {Prop} from 'vue-property-decorator';
-import {DocumentBase} from '../../model/DocumentBase';
 import ImageView from '../image_view/ImageView.vue';
+import {PictureBase} from '../../model/PictureBase';
 
 @WithRender
 @Component({
@@ -14,7 +14,7 @@ import ImageView from '../image_view/ImageView.vue';
 })
 export default class ImagePreview extends Vue {
   @Prop()
-  document: DocumentBase;
+  document: PictureBase;
 
   private dialogVisible = false;
 

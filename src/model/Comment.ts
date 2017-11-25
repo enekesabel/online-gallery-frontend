@@ -1,29 +1,29 @@
-import {User} from './User';
 import {CommentOptions} from './CommentOptions';
 
 export class Comment implements CommentOptions {
-  private _id: number;
-  private _user: User;
+  private _id: string;
+  private _userId: string;
   private _content: string;
   private _createdAt: string;
+  private _pictureId: string;
 
   constructor(options: CommentOptions) {
     this._id = options.id;
-    if (options.user instanceof User) {
-      this._user = options.user;
-    } else {
-      this._user = new User(options.user);
-    }
+    this._userId = options.userId;
     this._content = options.content;
     this._createdAt = options.createdAt;
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 
-  get user(): User {
-    return this._user;
+  get userId(): string {
+    return this._userId;
+  }
+
+  get pictureId(): string {
+    return this._pictureId;
   }
 
   get content(): string {

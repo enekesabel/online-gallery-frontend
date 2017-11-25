@@ -1,5 +1,5 @@
 import {UserOptions} from './UserOptions';
-import {Serializable} from "./Serializable";
+import {Serializable} from './Serializable';
 
 export class User implements UserOptions, Serializable {
   private _id: string;

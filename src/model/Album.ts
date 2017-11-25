@@ -1,27 +1,28 @@
-import {Document} from './Document';
 import {AlbumOptions} from './AlbumOptions';
-import {DocumentType} from './DocumentType';
-import {DocumentBaseOptions} from './DocumentBaseOptions';
-import {DocumentBase} from './DocumentBase';
+import {AlbumBase} from './AlbumBase';
+import {PictureBase} from './PictureBase';
 
-export class Album extends Document implements AlbumOptions {
-  protected _type: DocumentType = DocumentType.ALBUM;
-  protected _children: DocumentBase[] = [];
+export class Album extends AlbumBase implements AlbumOptions {
+
+  private _childAlbums: AlbumBase[] = [];
+  private _pictures: PictureBase[] = [];
 
   constructor(options: AlbumOptions) {
     super(options);
-    options.children.forEach(document => {
-      const documentOption: DocumentBaseOptions = document;
-      // documentOption.parent = this;
-      this._children.push(new DocumentBase(documentOption));
+    options.childAlbums.forEach(c => {
+      this._childAlbums.push(new AlbumBase(c));
+    });
+
+    options.pictures.forEach(p => {
+      this._pictures.push(new PictureBase(p));
     });
   }
 
-  get type(): DocumentType {
-    return this._type;
+  get childAlbums(): AlbumBase[] {
+    return this._childAlbums;
   }
 
-  get children(): DocumentBase[] {
-    return this._children;
+  get pictures(): PictureBase[] {
+    return this._pictures;
   }
 }
