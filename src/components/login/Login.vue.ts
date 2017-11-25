@@ -11,13 +11,12 @@ export default class Login extends Vue {
   private loginForm = {
     email: '',
     password: '',
-    name: 'asd', // todo: remove after backed fix
   };
 
   private rules = {
     email: [
       {required: true, message: 'Please input your emailAddress address', trigger: 'blur'},
-      {type: 'emailAddress', message: 'Please input a valid emailAddress address', trigger: 'blur'},
+      {type: 'email', message: 'Please input a valid emailAddress address', trigger: 'blur'},
     ],
     password: [
       {required: true, message: 'Please input your password'},

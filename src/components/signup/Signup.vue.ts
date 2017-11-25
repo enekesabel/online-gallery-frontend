@@ -8,7 +8,6 @@ export default class Signup extends Vue {
 
   private signupForm = {
     email: '',
-    name: '',
     password: '',
     passwordConfirm: '',
   };
@@ -16,7 +15,7 @@ export default class Signup extends Vue {
   private rules = {
     email: [
       {required: true, message: 'Please input your emailAddress address', trigger: 'blur'},
-      {type: 'emailAddress', message: 'Please input a valid emailAddress address', trigger: 'blur'},
+      {type: 'email', message: 'Please input a valid emailAddress address', trigger: 'blur'},
     ],
     name: [
       {required: true, message: 'Please input your full name', trigger: 'blur'},

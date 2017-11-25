@@ -19,7 +19,7 @@ export default new Router({
       name: 'home',
       component: Home,
       meta: {
-        auth: false,
+        auth: true,
       },
       children: [
         {
