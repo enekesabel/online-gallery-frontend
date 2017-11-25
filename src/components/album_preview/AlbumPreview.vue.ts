@@ -11,7 +11,7 @@ export default class AlbumPreview extends Vue {
   document: AlbumBase;
 
   openAlbum() {
-    this.$router.push(this.$route.path + '/' + this.document.name);
+    this.$router.push((this.$route.path + '/' + this.document.name).replace('//', '/'));
   }
 
 }

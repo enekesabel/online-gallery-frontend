@@ -27,17 +27,21 @@ export default new Router({
           redirect: '/albums',
         },
         {
-          path: '/profile',
-          name: 'profile',
-          component: Settings,
+          path: 'albums',
+          component: Gallery,
         },
         {
           path: '/albums/*',
           name: 'albums',
           component: Gallery,
           props: route => ({
-            albumId: route.params[0],
+            albumId: route.params[0] || '',
           }),
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: Settings,
         },
         {
           path: '/users',
@@ -48,7 +52,7 @@ export default new Router({
           path: '/groups',
           name: 'groups',
           component: Groups,
-        },
+        }
       ],
     },
     {
