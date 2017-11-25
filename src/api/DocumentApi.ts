@@ -13,7 +13,7 @@ export class DocumentApi extends AbstractApi<DocumentBase> {
   private factory: DocumentBaseFactory = new DocumentBaseFactory();
 
   constructor() {
-    super('/gallery');
+    super('/albums');
   }
 
   createEntity(o: DocumentBaseOptions): DocumentBase {

@@ -6,8 +6,10 @@ import {ShareType} from '../../model/ShareType';
 import {AlbumBase} from '../../model/AlbumBase';
 import {PictureBase} from '../../model/PictureBase';
 import {DocumentBaseFactory} from '../../model/DocumentBaseFactory';
+import MessageBus from '../../components/message_bus/MessageBus.vue';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
+const api = new DocumentApi();
 
 enum MutationType {
   SET_ALBUM = 'SET_ALBUM',
@@ -47,9 +49,17 @@ const getters = {
 
 const actions = {
   async fetchDocument({commit}, {documentId}) {
-    const api = new DocumentApi();
     const document = await api.get(documentId);
     commit(MutationType.SET_ALBUM, document);
+  },
+  async deleteDocument({commit}, {documentId}) {
+    try {
+      await api.delete(documentId);
+      MessageBus.showSuccess('Delete completed');
+      commit(MutationType.REMOVE_CHILD, documentId);
+    } catch (err) {
+      MessageBus.showError('Error occurred when deleting document.');
+    }
   },
 };
 

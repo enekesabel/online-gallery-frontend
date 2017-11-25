@@ -42,10 +42,7 @@ export default class DocumentPreview extends Vue {
       cancelButtonText: 'Cancel',
       type: 'warning',
     }).then(() => {
-      this.$message({
-        type: 'success',
-        message: 'Delete completed',
-      });
+      this.$store.dispatch('deleteDocument', {documentId: this.document.id});
     }).catch(() => {
       this.$message({
         type: 'info',
