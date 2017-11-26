@@ -3,6 +3,7 @@ import Component from 'vue-class-component';
 import WithRender from './Gallery.html?style=./Gallery.scss';
 import DocumentPreview from '../../components/document_perview/DocumentPreview.vue';
 import Comments from '../../components/comments/Comments.vue';
+import MessageBus from '../../components/message_bus/MessageBus.vue';
 import {Album} from '../../model/Album';
 import {AlbumBase} from '../../model/AlbumBase';
 import {PictureBase} from '../../model/PictureBase';
@@ -10,6 +11,7 @@ import {Prop, Watch} from 'vue-property-decorator';
 import dashify from 'dashify';
 import {ShareType} from '../../model/ShareType';
 import {DocumentType} from '../../model/DocumentType';
+import { Message } from 'element-ui';
 
 @WithRender
 @Component({
@@ -34,6 +36,25 @@ export default class Gallery extends Vue {
       {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
     ],
   };
+
+  private fileList = [];
+
+  get fileUploadData() {
+    return {
+      albumId: this.album.id,
+      filesToUpload: this.fileList,
+    };
+  }
+
+  get fileUploadHeaders() {
+    return {
+      Authorization: 'Bearer ' + this.$auth.token(),
+    };
+  }
+
+  get fileUploadAction() {
+    return Vue.axios.defaults.baseURL + '/pictures';
+  }
 
   get childAlbums(): AlbumBase[] {
     return this.album.childAlbums;
@@ -98,6 +119,28 @@ export default class Gallery extends Vue {
   }
 
   mounted() {
+    this.fetchAlbum();
+  }
+
+  beforeFileUpload() {
+    this.$message({
+      type: 'info',
+      iconClass: 'el-icon-loading',
+      dangerouslyUseHTMLString: true,
+      duration: 0,
+      message: '<span class="ml-2">Your images are being uploaded.</span>',
+    });
+  }
+
+  onFileUploadError() {
+    Message.closeAll();
+    MessageBus.showError('Error occurred during file upload.');
+    this.fetchAlbum();
+  }
+
+  onFileUploadSuccess() {
+    Message.closeAll();
+    MessageBus.showSuccess('Files uploaded successfully');
     this.fetchAlbum();
   }
 

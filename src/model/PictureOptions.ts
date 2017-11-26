@@ -8,4 +8,9 @@ export type PictureOptions = PictureBaseOptions & {
   height: number;
   description: string;
   createdAt: string;
+  metaData: {
+    height: number,
+    width: number,
+    size: number,
+  }
 };

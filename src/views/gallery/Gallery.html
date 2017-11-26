@@ -25,16 +25,20 @@
   <el-row class="mt-5">
     <el-col :sm="24" class="text-center">
       <el-upload
-        class="upload-demo"
         drag
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
+        :data="fileUploadData"
+        :action="fileUploadAction"
+        :headers="fileUploadHeaders"
+        name="FilesToUpload"
+        :show-file-list="false"
+        accept=".png,.jpeg,.jpg,.gif"
+        :on-success="onFileUploadSuccess"
+        :on-error="onFileUploadError"
+        :before-upload="beforeFileUpload"
         :file-list="fileList"
         multiple>
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-        <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+        <div class="el-upload__text">Drop images here or <em>click to upload</em></div>
       </el-upload>
     </el-col>
   </el-row>
