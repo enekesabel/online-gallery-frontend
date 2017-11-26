@@ -4,6 +4,7 @@ import WithRender from './Groups.html?style=./Groups.scss';
 import {Group} from '../../model/Group';
 import UserComponent from '../../components/user/User.vue';
 import GroupEditor from '../../components/group_editor/GroupEditor.vue';
+import {Watch} from 'vue-property-decorator';
 
 @WithRender
 @Component({
@@ -13,10 +14,18 @@ export default class Groups extends Vue {
 
   private editDialogVisible: boolean = false;
   private selectedGroup: Group;
-  private editDialogTitle: string = 'Editing group'
+  private editDialogTitle: string = 'Editing group';
 
-  get groups(): Group[] {
-    return this.$store.getters.getGroups;
+  created() {
+    this.$store.dispatch('fetchGroups');
+  }
+
+  get ownedGroups(): Group[] {
+    return this.$store.getters.getOwnedGroups;
+  }
+
+  get memberOfGroups(): Group[] {
+    return this.$store.getters.getMemberOfGroups;
   }
 
   editGroup(group: Group) {
@@ -31,25 +40,24 @@ export default class Groups extends Vue {
     this.editDialogVisible = true;
   }
 
+  quitFromGroup(group: Group) {
+    this.$confirm('Are you sure you want to leave this group?', 'Warning', {
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }).then(() => {
+      this.$store.dispatch('quitFromGroup', group.id);
+    }).catch(() => {
+    });
+  }
+
   deleteGroup(group: Group) {
     this.$confirm('This will permanently delete the group. Continue?', 'Warning', {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
       type: 'warning',
     }).then(() => {
-      this.$store.dispatch('deleteGroup', {groupId: group.id})
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: 'Delete completed',
-          });
-        })
-        .catch(err => {
-          this.$message({
-            type: 'error',
-            message: 'Error occurred during deleting group',
-          });
-        });
+      this.$store.dispatch('deleteGroup', group.id);
     }).catch(() => {
       this.$message({
         type: 'info',

@@ -1,29 +1,31 @@
-import {User} from './User';
 import {CommentOptions} from './CommentOptions';
+import {Serializable} from './Serializable';
 
-export class Comment implements CommentOptions {
-  private _id: number;
-  private _user: User;
+export class Comment implements CommentOptions, Serializable {
+  private _id: string;
+  private _userId: string;
   private _content: string;
   private _createdAt: string;
+  private _pictureId: string;
 
   constructor(options: CommentOptions) {
     this._id = options.id;
-    if (options.user instanceof User) {
-      this._user = options.user;
-    } else {
-      this._user = new User(options.user);
-    }
+    this._userId = options.userId;
     this._content = options.content;
     this._createdAt = options.createdAt;
+    this._pictureId = options.pictureId;
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 
-  get user(): User {
-    return this._user;
+  get userId(): string {
+    return this._userId;
+  }
+
+  get pictureId(): string {
+    return this._pictureId;
   }
 
   get content(): string {
@@ -36,5 +38,15 @@ export class Comment implements CommentOptions {
 
   get createdAt(): string {
     return this._createdAt;
+  }
+
+  toObject(): CommentOptions {
+    return {
+      id: this.id,
+      userId: this.userId,
+      content: this.content,
+      pictureId: this.pictureId,
+      createdAt: this.createdAt,
+    };
   }
 }

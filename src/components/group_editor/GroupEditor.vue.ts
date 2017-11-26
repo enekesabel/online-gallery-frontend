@@ -12,7 +12,7 @@ export default class GroupEditor extends Vue {
   @Prop()
   private group: Group;
 
-  private selectedUserIds = [];
+  private selectedUserIds: string[] = [];
   private form = {
     name: '',
   };
@@ -24,9 +24,7 @@ export default class GroupEditor extends Vue {
   };
 
   mounted() {
-    this.group.users.forEach(u => {
-      this.selectedUserIds.push(u.id);
-    });
+    this.selectedUserIds = this.group.userIds;
     this.form.name = this.group.name;
   }
 
@@ -36,15 +34,19 @@ export default class GroupEditor extends Vue {
 
         // if editing group
         if (this.group.id && this.group.id !== '') {
-          this.$store.dispatch('updateGroup', {
-            group: new Group({
-              id: this.group.id,
-              name: this.form.name,
-              users: this.selectedUsers,
-            }),
-          });
+          this.$store.dispatch('updateGroup', new Group({
+            id: this.group.id,
+            name: this.form.name,
+            userIds: this.selectedUserIds,
+            ownerUserId: '', // todo: fix
+          }));
         } else {
-          // if creating group
+          this.$store.dispatch('createGroup', new Group({
+            id: this.group.id,
+            name: this.form.name,
+            userIds: this.selectedUserIds,
+            ownerUserId: '', // todo: fix
+          }));
         }
 
         this.$emit('saved');

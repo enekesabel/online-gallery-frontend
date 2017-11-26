@@ -1,10 +1,11 @@
 <div class="comment w-100 d-flex mt-3">
   <div class="comment-info w-100">
-    <span class="comment-author font-weight-bold">{{comment.user.name}}</span>
+    <span class="comment-author font-weight-bold">{{userName}}</span>
     <span> - </span>
-    <span class="comment-date">{{comment.createdAt}}</span>
+    <span class="comment-date">{{date}}</span>
   </div>
   <div class="comment-content w-100">
     {{comment.content}}
   </div>
+  <i class="el-icon-delete fa-lg text-danger remove-comment" @click="removeComment"></i>
 </div>

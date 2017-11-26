@@ -1,3 +1,3 @@
 export type HasId = {
-  id: string | number
-}
+  id: string;
+};

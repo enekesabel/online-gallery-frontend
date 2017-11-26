@@ -1,18 +1,18 @@
 <el-card :body-style="{ padding: '0px' }">
   <div slot="header" class="d-flex align-items-center justify-content-between">
-    <span>{{document.name}}</span>
+    <slot name="documentName"></slot>
     <slot name="button"></slot>
   </div>
   </div>
-  <img :src="document.url" @click="openImage()" class="img-fluid preview-image"/>
-  <div class="p-2">
-    {{document.comments.length}} comments
+  <img :src="imageUrl" @click="openImage()" class="img-fluid preview-image"/>
+  <div v-if="false" class="p-2">
+    {{document.commentsNumber}} comments
   </div>
 
   <el-dialog
     :visible.sync="dialogVisible"
     :fullscreen="true"
-    :title="document.name"
+    :title="document.displayName"
     :before-close="handleClose">
     <image-view :image="document"></image-view>
   </el-dialog>

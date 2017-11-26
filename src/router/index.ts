@@ -18,20 +18,30 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        auth: true,
+      },
       children: [
         {
           path: '',
+          redirect: '/albums',
+        },
+        {
+          path: 'albums',
           component: Gallery,
+        },
+        {
+          path: '/albums/*',
+          name: 'albums',
+          component: Gallery,
+          props: route => ({
+            albumId: route.params[0] || '',
+          }),
         },
         {
           path: '/profile',
           name: 'profile',
           component: Settings,
-        },
-        {
-          path: '/gallery',
-          name: 'gallery',
-          component: Gallery,
         },
         {
           path: '/users',
@@ -42,7 +52,7 @@ export default new Router({
           path: '/groups',
           name: 'groups',
           component: Groups,
-        },
+        }
       ],
     },
     {
@@ -50,29 +60,23 @@ export default new Router({
       components: {
         notLoggedIn: Auth,
       },
+      meta: {
+        auth: false,
+      },
       children: [
         {
           path: '',
           component: Login,
-          meta: {
-            auth: false,
-          },
         },
         {
           path: '/login',
           name: 'login',
           component: Login,
-          meta: {
-            auth: false,
-          },
         },
         {
           path: '/signup',
           name: 'signup',
           component: Signup,
-          meta: {
-            auth: false,
-          },
         },
       ],
     },

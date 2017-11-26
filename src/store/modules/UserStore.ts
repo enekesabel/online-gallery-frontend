@@ -1,5 +1,8 @@
 import {User} from '../../model/User';
 import {UserApi} from '../../api/UserApi';
+import MessageBus from '../../components/message_bus/MessageBus.vue';
+
+const api = new UserApi();
 
 enum MutationType {
   SET_USERS = 'SET_USERS',
@@ -17,9 +20,13 @@ const getters = {
 
 const actions = {
   async fetchUsers({commit}) {
-    const api = new UserApi();
-    const users = await api.getAll();
-    commit(MutationType.SET_USERS, users);
+    try {
+      const users = await api.getAll();
+      commit(MutationType.SET_USERS, users.data);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when retrieving users.');
+    }
   },
 };
 

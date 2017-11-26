@@ -1,34 +1,25 @@
 import {DocumentBaseOptions} from './DocumentBaseOptions';
-import {User} from './User';
 import {DocumentType} from './DocumentType';
+import {Serializable} from './Serializable';
 
-export class DocumentBase implements DocumentBaseOptions {
-  private _id: number;
-  private _name: string;
-  private _url: string;
-  private _owner: User;
+export abstract class DocumentBase implements DocumentBaseOptions, Serializable {
+  protected _id: string = '';
+  protected _name: string = '';
+  protected _displayName: string = '';
+  protected _ownerUserId: string;
   protected _type: DocumentType;
-  protected _parent: DocumentBase;
-  private _comments: any[] = [];
-  private _children: any[] = [];
+  protected _parentAlbumId: string;
 
-  constructor(options: DocumentBaseOptions) {
-    this._id = options.id;
-    this._name = options.name;
-    this._url = options.url;
-    if (options.owner instanceof User) {
-      this._owner = options.owner;
-    } else {
-      this._owner = new User(options.owner);
-    }
-    this._type = options.type;
-    this._comments = options.comments;
-    if (options.children) {
-      this._children = options.children;
-    }
+  constructor(options?: DocumentBaseOptions) {
+    this._id = options && options.id;
+    this._name = options && options.name;
+    this._displayName = options && options.displayName;
+    this._ownerUserId = options && options.ownerUserId;
+    this._parentAlbumId = options && options.parentAlbumId;
+    this._type = options && options.type;
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 
@@ -36,31 +27,31 @@ export class DocumentBase implements DocumentBaseOptions {
     return this._name;
   }
 
-  set name(value: string) {
-    this._name = value;
-  }
-
-  get url(): string {
-    return this._url;
-  }
-
-  get owner(): User {
-    return this._owner;
+  get ownerUserId(): string {
+    return this._ownerUserId;
   }
 
   get type(): DocumentType {
     return this._type;
   }
 
-  get parent(): DocumentBase {
-    return this._parent;
+  get displayName(): string {
+    return this._displayName;
   }
 
-  get comments(): any[] {
-    return this._comments;
+  get parentAlbumId(): string {
+    return this._parentAlbumId;
   }
 
-  get children(): any[] {
-    return this._children;
+  toObject(): DocumentBaseOptions {
+    return {
+      id: this.id,
+      type: this.type,
+      name: this.name,
+      displayName: this.displayName,
+      parentAlbumId: this.parentAlbumId,
+      ownerUserId: this.ownerUserId,
+    };
   }
+
 }

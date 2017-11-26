@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 import WithRender from './ImageView.html?style=./ImageView.scss';
 
 import {Prop} from 'vue-property-decorator';
-import {Image} from '../../model/Image';
+import {Picture} from '../../model/Picture';
 import Comments from '../../components/comments/Comments.vue';
 
 @WithRender
@@ -14,6 +14,14 @@ import Comments from '../../components/comments/Comments.vue';
 })
 export default class ImageView extends Vue {
   @Prop()
-  image: Image;
+  image: Picture;
+
+  mounted() {
+    this.$store.dispatch('getCommentForPicture', this.image);
+  }
+
+  get imageUrl() {
+    return Vue.prototype.staticUrl + '/' + (this.image.name);
+  }
 
 }

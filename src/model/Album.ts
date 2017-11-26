@@ -1,27 +1,37 @@
-import {Document} from './Document';
 import {AlbumOptions} from './AlbumOptions';
-import {DocumentType} from './DocumentType';
-import {DocumentBaseOptions} from './DocumentBaseOptions';
-import {DocumentBase} from './DocumentBase';
+import {AlbumBase} from './AlbumBase';
+import {Picture} from './Picture';
 
-export class Album extends Document implements AlbumOptions {
-  protected _type: DocumentType = DocumentType.ALBUM;
-  private _children: DocumentBase[] = [];
+export class Album extends AlbumBase implements AlbumOptions {
+
+  private _childAlbums: AlbumBase[] = [];
+  private _pictures: Picture[] = [];
+  private _albumTree: { name: string }[] = [];
 
   constructor(options: AlbumOptions) {
     super(options);
-    options.children.forEach(document => {
-      const documentOption: DocumentBaseOptions = document;
-      // documentOption.parent = this;
-      this._children.push(new DocumentBase(documentOption));
+    options.childAlbums && options.childAlbums.forEach(c => {
+      this._childAlbums.push(new AlbumBase(c));
+    });
+
+    options.pictures && options.pictures.forEach(p => {
+      this._pictures.push(new Picture(p));
+    });
+
+    options.albumTree && options.albumTree.forEach(node => {
+      this._albumTree.push({name: node.name});
     });
   }
 
-  get type(): DocumentType {
-    return this._type;
+  get childAlbums(): AlbumBase[] {
+    return this._childAlbums;
   }
 
-  get children(): DocumentBase[] {
-    return this._children;
+  get pictures(): Picture[] {
+    return this._pictures;
+  }
+
+  get albumTree(): { name: string }[] {
+    return this._albumTree;
   }
 }

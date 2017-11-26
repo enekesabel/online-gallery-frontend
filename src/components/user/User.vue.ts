@@ -8,6 +8,15 @@ import {User} from '../../model/User';
 @WithRender
 @Component
 export default class UserComponent extends Vue {
-  @Prop()
-  user: User;
+  @Prop({
+    default: new User(),
+    required: true,
+  })
+  userId: string
+
+  get user(): User {
+    return this.$store.getters.getUsers.find(u => {
+      return u.id === this.userId;
+    });
+  }
 }

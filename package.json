@@ -14,10 +14,15 @@
     "tslint": "tslint -s node_modules/custom-tslint-formatters/formatters -t grouped 'src/**/*.ts' 'test/unit/**/*.ts' 'test/e2e/*.ts'"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^2.20.8-beta",
+    "axios": "^0.17.1",
     "bootstrap": "^4.0.0-beta.2",
+    "dashify": "^0.2.2",
     "element-ui": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "moment": "^2.19.2",
     "vue": "^2.5.0",
+    "vue-axios": "^2.0.2",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.0",

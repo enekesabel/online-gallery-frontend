@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import WithRender from './DocumentPreview.html';
-import {Prop} from 'vue-property-decorator';
+import {Prop, Watch} from 'vue-property-decorator';
 import {DocumentBase} from '../../model/DocumentBase';
 import {DocumentType} from '../../model/DocumentType';
 import AlbumPreview from '../album_preview/AlbumPreview.vue';
 import ImagePreview from '../image_preview/ImagePreview.vue';
+import dashify from 'dashify';
+import {AlbumBase} from '../../model/AlbumBase';
 
 @WithRender
 @Component({
@@ -17,12 +19,24 @@ import ImagePreview from '../image_preview/ImagePreview.vue';
 export default class DocumentPreview extends Vue {
   @Prop({
     required: true,
-    type: DocumentBase,
+    default: new AlbumBase(),
   })
-  document: DocumentBase;
+  private document: DocumentBase;
+  private renameAlbumDialogVisible: boolean = false;
+
+  private documentNameForm = {
+    documentName: '',
+  };
+
+  private rules = {
+    documentName: [
+      {required: true, message: 'Please input the album name', trigger: 'blur'},
+      {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
+    ],
+  };
 
   get componentToCreate() {
-    if (this.document.type === DocumentType.IMAGE) {
+    if (this.document.type === DocumentType.PICTURE) {
       return 'image-preview';
     } else {
       return 'album-preview';
@@ -34,7 +48,33 @@ export default class DocumentPreview extends Vue {
       case 'delete':
         this.openDeleteConfirmation();
         break;
+      case 'rename':
+        this.renameDocument();
+        break;
     }
+  }
+
+  saveDocumentName() {
+    this.$refs.documentNameForm.validate((valid) => {
+      if (valid) {
+        this.$store.dispatch('renameAlbum', {
+          albumId: this.document.id,
+          newName: dashify(this.documentNameForm.documentName),
+          newDisplayName: this.documentNameForm.documentName,
+        });
+        this.renameAlbumDialogVisible = false;
+      }
+    });
+  }
+
+  renameDocument() {
+    this.renameAlbumDialogVisible = true;
+    this.documentNameForm.documentName = this.document.displayName || this.document.name || '';
+  }
+
+  cancelRename() {
+    this.$refs.documentNameInput.resetFields();
+    this.renameAlbumDialogVisible = false;
   }
 
   openDeleteConfirmation() {
@@ -43,16 +83,21 @@ export default class DocumentPreview extends Vue {
       cancelButtonText: 'Cancel',
       type: 'warning',
     }).then(() => {
-      this.$message({
-        type: 'success',
-        message: 'Delete completed',
-      });
+      this.$store.dispatch('deleteDocument', this.document.id);
     }).catch(() => {
       this.$message({
         type: 'info',
         message: 'Delete canceled',
       });
     });
+  }
+
+  @Watch('document.displayName', {
+    immediate: true,
+    deep: true,
+  })
+  onDocumentNameChange(val) {
+    this.documentNameForm.documentName = val;
   }
 
 }
