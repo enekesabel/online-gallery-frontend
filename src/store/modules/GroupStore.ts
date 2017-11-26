@@ -127,9 +127,7 @@ const mutations = {
       return g.id === group.id;
     });
     if (groupIndex !== -1) {
-      const groups = state.ownedGroups.slice();
-      groups[groupIndex] = group;
-      state.ownedGroups = groups;
+      state.ownedGroups.splice(groupIndex, 1, group);
     } else {
       state.ownedGroups.push(group);
     }

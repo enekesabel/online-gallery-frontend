@@ -1,8 +1,8 @@
 <div class="comments">
-  <p v-if="document.comments.length === 0" class="text-placeholder">
+  <p v-if="picture.comments.length === 0" class="text-placeholder">
     There are no comments yet
   </p>
-  <comment-component v-for="comment in document.comments" :comment="comment"></comment-component>
+  <comment-component v-for="comment in picture.comments" :comment="comment"></comment-component>
   <div class="d-flex mt-4 align-items-start">
     <el-input
       class="comment-input mr-2"

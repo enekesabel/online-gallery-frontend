@@ -1,8 +1,8 @@
 import {AlbumBaseOptions} from './AlbumBaseOptions';
-import {PictureBaseOptions} from './PictureBaseOptions';
+import {PictureOptions} from './PictureOptions';
 
 export type AlbumOptions = AlbumBaseOptions & {
   childAlbums: AlbumBaseOptions[];
-  pictures: PictureBaseOptions[];
+  pictures: PictureOptions[];
   albumTree: { name: string }[];
 };
