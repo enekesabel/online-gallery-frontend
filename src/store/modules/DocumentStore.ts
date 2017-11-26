@@ -74,6 +74,14 @@ const actions = {
       MessageBus.showError('Error occurred when creating album.');
     }
   },
+  async renameAlbum({commit}, {albumId, newName}) {
+    try {
+      const response = await api.renameAlbum(albumId, newName);
+      commit(MutationType.SET_CHILD, new AlbumBase(response.data));
+    } catch (err) {
+      MessageBus.showError('Error occurred when renaming album.');
+    }
+  },
 };
 
 const mutations = {

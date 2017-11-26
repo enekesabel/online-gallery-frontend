@@ -19,10 +19,17 @@ export default class DocumentPreview extends Vue {
     required: true,
   })
   private document: DocumentBase;
-  private documentName: string = '';
+  private renameAlbumDialogVisible: boolean = false;
 
-  mounted() {
-    this.documentName = this.document.displayName || this.document.name || '';
+  private documentNameForm = {
+    documentName: '',
+  };
+
+  private rules = {
+    documentName: [
+      {required: true, message: 'Please input the album name', trigger: 'blur'},
+      {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
+    ],
   }
 
   get componentToCreate() {
@@ -44,8 +51,23 @@ export default class DocumentPreview extends Vue {
     }
   }
 
-  renameDocument() {
+  saveDocumentName() {
+    this.$refs.documentNameForm.validate((valid) => {
+      if (valid) {
+        this.$store.dispatch('renameAlbum', {albumId: this.document.id, newName: this.documentNameForm.documentName});
+        this.renameAlbumDialogVisible = false;
+      }
+    });
+  }
 
+  renameDocument() {
+    this.renameAlbumDialogVisible = true;
+    this.documentNameForm.documentName = this.document.displayName || this.document.name || '';
+  }
+
+  cancelRename() {
+    this.$refs.documentNameInput.resetFields();
+    this.renameAlbumDialogVisible = false;
   }
 
   openDeleteConfirmation() {

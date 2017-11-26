@@ -1,19 +1,31 @@
 <component :is="componentToCreate" :document="document">
   <template slot="documentName">
     <span>{{document.displayName}}</span>
-    <el-input v-if="false" :placeholder="document.displayName"
-              size="small"
-              v-model="documentName">
-      <el-button slot="append" icon="fa fa-lg fa-save"></el-button>
-    </el-input>
   </template>
-  <el-dropdown slot="button" trigger="click" @command="handleCommand">
-    <el-button type="text" class="el-icon-more"></el-button>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="share">Share</el-dropdown-item>
-      <el-dropdown-item command="move">Move</el-dropdown-item>
-      <el-dropdown-item command="rename">Rename</el-dropdown-item>
-      <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
-    </el-dropdown-menu>
-  </el-dropdown>
+  <template slot="button">
+    <el-dropdown trigger="click" @command="handleCommand">
+      <el-button type="text" class="el-icon-more"></el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="share">Share</el-dropdown-item>
+        <el-dropdown-item command="move">Move</el-dropdown-item>
+        <el-dropdown-item command="rename">Rename</el-dropdown-item>
+        <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+    <el-dialog
+      title="Rename album"
+      :visible.sync="renameAlbumDialogVisible">
+      <el-form :model="documentNameForm" label-position="left" label-width="120px" :rules="rules" ref="documentNameForm">
+        <el-form-item label="Album name" prop="documentName">
+          <el-input :placeholder="document.displayName"
+                    size="small"
+                    ref="documentNameInput"
+                    v-model="documentNameForm.documentName">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <el-button @click="cancelRename">Cancel</el-button>
+      <el-button type="primary" @click="saveDocumentName">Save</el-button>
+    </el-dialog>
+  </template>
 </component>
