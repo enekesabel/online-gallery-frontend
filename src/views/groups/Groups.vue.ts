@@ -20,8 +20,12 @@ export default class Groups extends Vue {
     this.$store.dispatch('fetchGroups');
   }
 
-  get groups(): Group[] {
+  get ownedGroups(): Group[] {
     return this.$store.getters.getOwnedGroups;
+  }
+
+  get memberOfGroups(): Group[] {
+    return this.$store.getters.getMemberOfGroups;
   }
 
   editGroup(group: Group) {
@@ -34,6 +38,17 @@ export default class Groups extends Vue {
     this.selectedGroup = new Group();
     this.editDialogTitle = 'Creating group';
     this.editDialogVisible = true;
+  }
+
+  quitFromGroup(group: Group) {
+    this.$confirm('Are you sure you want to leave this group?', 'Warning', {
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }).then(() => {
+      this.$store.dispatch('quitFromGroup', group.id);
+    }).catch(() => {
+    });
   }
 
   deleteGroup(group: Group) {
@@ -49,10 +64,5 @@ export default class Groups extends Vue {
         message: 'Delete canceled',
       });
     });
-  }
-
-  @Watch('groups', {deep: true})
-  onGroupChange() {
-    console.log('group changed');
   }
 }

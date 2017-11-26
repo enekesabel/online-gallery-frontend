@@ -1,24 +1,39 @@
 <div>
   <div class="mb-4 d-flex justify-content-between align-items-center">
-    <h4 class="m-0">Groups</h4>
+    <h4 class="m-0">My own groups</h4>
     <el-button type="primary" icon="el-icon-circle-plus-outline" @click="createGroup">Add</el-button>
   </div>
-  <el-collapse accordion>
-    <el-collapse-item v-for="group in groups">
-      <template slot="title">
-        <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
-        <el-button type="text" @click.stop="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
-        <el-button type="text" @click.stop="deleteGroup(group)"><i class="el-icon-delete fa-lg ml-2 color-danger"></i>
-        </el-button>
-      </template>
-      <div class="ml-4">
-        <template v-if="group.userIds.length > 0">
-          <user-component v-for="userId in group.userIds" :userId="userId"></user-component>
+  <template v-if="ownedGroups.length> 0">
+    <el-collapse accordion>
+      <el-collapse-item v-for="group in ownedGroups">
+        <template slot="title">
+          <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
+          <el-button type="text" @click.stop="editGroup(group)"><i class="el-icon-setting fa-lg ml-2"></i></el-button>
+          <el-button type="text" @click.stop="deleteGroup(group)"><i class="el-icon-delete fa-lg ml-2 color-danger"></i>
+          </el-button>
         </template>
-        <p class="m-0" v-else="">This group has no members yet.</p>
+        <div class="ml-4">
+          <template v-if="group.userIds.length > 0">
+            <user-component v-for="userId in group.userIds" :userId="userId"></user-component>
+          </template>
+          <p class="m-0" v-else="">This group has no members yet.</p>
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+  </template>
+  <p v-else="">You don't have any groups yet.</p>
+  <div>
+    <h4 class="my-4">Groups where I'm a member</h4>
+    <template v-if="memberOfGroups.length> 0">
+      <div class="w-100" v-for="group in memberOfGroups">
+        <div class="w-100 my-2 divider"></div>
+        <i class="fa fa-lg fa-users color-info mr-2"></i>{{group.name}}
+        <el-button type="text" icon="el-icon-remove" class="fa-lg ml-2 color-danger" title="Leave group" @click.stop="quitFromGroup(group)"></el-button>
       </div>
-    </el-collapse-item>
-  </el-collapse>
+      <div class="w-100 my-2 divider"></div>
+    </template>
+    <p v-else="">You are not a member of any groups yet.</p>
+  </div>
   <el-dialog
     :title="editDialogTitle"
     :visible.sync="editDialogVisible"

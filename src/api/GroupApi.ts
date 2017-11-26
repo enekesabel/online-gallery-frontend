@@ -55,4 +55,7 @@ export class GroupApi extends AbstractApi<Group> {
     });
   }
 
+  async quitFromGroup(groupId) {
+    return await Vue.axios.get(this.url + '/quit/' + groupId);
+  }
 }

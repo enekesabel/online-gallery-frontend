@@ -1,4 +1,4 @@
-<el-container class="container">
+<el-container class="container h-100">
   <el-header>
     <el-menu :router="true" :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="/albums/">Gallery</el-menu-item>
@@ -11,7 +11,7 @@
       </el-submenu>
     </el-menu>
   </el-header>
-  <el-main>
+  <el-main class="h-100">
     <router-view></router-view>
   </el-main>
 </el-container>

@@ -9,6 +9,7 @@ enum MutationType {
   SET_MEMBER_OF_GROUPS = 'SET_MEMBER_OF_GROUPS',
   SET_GROUP = 'SET_GROUP',
   DELETE_GROUP = 'DELETE_GROUP',
+  LEAVE_GROUP = 'LEAVE_GROUP',
 }
 
 class State {
@@ -106,6 +107,14 @@ const actions = {
       MessageBus.showError('Error occurred when deleting group.');
     }
   },
+  async quitFromGroup({commit}, groupId) {
+    try {
+      await api.quitFromGroup(groupId);
+      commit(MutationType.LEAVE_GROUP, groupId);
+    } catch (err) {
+      MessageBus.showError('Error occurred when leaving group.');
+    }
+  },
 };
 
 const mutations = {
@@ -133,6 +142,14 @@ const mutations = {
     });
     if (groupIndex !== -1) {
       state.ownedGroups.splice(groupIndex, 1);
+    }
+  },
+  [MutationType.LEAVE_GROUP](state: State, groupId: string) {
+    const groupIndex = state.memberOfGroups.findIndex(g => {
+      return g.id === groupId;
+    });
+    if (groupIndex !== -1) {
+      state.memberOfGroups.splice(groupIndex, 1);
     }
   },
 };
