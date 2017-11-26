@@ -4,20 +4,19 @@ import {DocumentBase} from './DocumentBase';
 
 export class PictureBase extends DocumentBase implements PictureBaseOptions {
   protected _type: DocumentType = DocumentType.PICTURE;
-  private _commentsNumber: number;
-  private _url: string;
+  private _commentsNumber: number = 0;
+  private _thumbnailName: string = '';
 
   constructor(options: PictureBaseOptions) {
     super(options);
     this._commentsNumber = options.commentsNumber;
-    this._url = options.url;
   }
 
   get commentsNumber(): number {
     return this._commentsNumber;
   }
 
-  get url(): string {
-    return this._url;
+  get thumbnailName(): string {
+    return this._thumbnailName;
   }
 }
