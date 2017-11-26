@@ -2,14 +2,14 @@ import {UserOptions} from './UserOptions';
 import {Serializable} from './Serializable';
 
 export class User implements UserOptions, Serializable {
-  private _id: string;
-  private _name: string;
-  private _emailAddress: string;
+  private _id: string = null;
+  private _name: string = '';
+  private _emailAddress: string = '';
 
-  constructor(options: UserOptions) {
-    this._id = options.id;
-    this._name = options.name;
-    this._emailAddress = options.emailAddress;
+  constructor(options?: UserOptions) {
+    this._id = options && options.id;
+    this._name = options && options.name;
+    this._emailAddress = options && options.emailAddress;
   }
 
   get id(): string {

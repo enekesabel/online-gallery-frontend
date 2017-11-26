@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import WithRender from './DocumentPreview.html';
-import {Prop} from 'vue-property-decorator';
+import {Prop, Watch} from 'vue-property-decorator';
 import {DocumentBase} from '../../model/DocumentBase';
 import {DocumentType} from '../../model/DocumentType';
 import AlbumPreview from '../album_preview/AlbumPreview.vue';
 import ImagePreview from '../image_preview/ImagePreview.vue';
+import dashify from 'dashify';
+import {AlbumBase} from '../../model/AlbumBase';
 
 @WithRender
 @Component({
@@ -17,6 +19,7 @@ import ImagePreview from '../image_preview/ImagePreview.vue';
 export default class DocumentPreview extends Vue {
   @Prop({
     required: true,
+    default: new AlbumBase(),
   })
   private document: DocumentBase;
   private renameAlbumDialogVisible: boolean = false;
@@ -30,7 +33,7 @@ export default class DocumentPreview extends Vue {
       {required: true, message: 'Please input the album name', trigger: 'blur'},
       {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
     ],
-  }
+  };
 
   get componentToCreate() {
     if (this.document.type === DocumentType.PICTURE) {
@@ -54,7 +57,11 @@ export default class DocumentPreview extends Vue {
   saveDocumentName() {
     this.$refs.documentNameForm.validate((valid) => {
       if (valid) {
-        this.$store.dispatch('renameAlbum', {albumId: this.document.id, newName: this.documentNameForm.documentName});
+        this.$store.dispatch('renameAlbum', {
+          albumId: this.document.id,
+          newName: dashify(this.documentNameForm.documentName),
+          newDisplayName: this.documentNameForm.documentName,
+        });
         this.renameAlbumDialogVisible = false;
       }
     });
@@ -83,6 +90,14 @@ export default class DocumentPreview extends Vue {
         message: 'Delete canceled',
       });
     });
+  }
+
+  @Watch('document.displayName', {
+    immediate: true,
+    deep: true,
+  })
+  onDocumentNameChange(val) {
+    this.documentNameForm.documentName = val;
   }
 
 }

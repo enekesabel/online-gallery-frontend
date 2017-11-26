@@ -11,10 +11,11 @@ export class DocumentApi extends AbstractApi<DocumentBase> {
     throw new Error('Not implemented');
   }
 
-  async renameAlbum(albumId: string, newName: string): Promise<any> {
+  async renameAlbum(albumId: string, newName: string, newDisplayName: string): Promise<any> {
     return await Vue.axios.patch(this.url + '/renamealbum', {
       albumId,
       newName,
+      newDisplayName,
     });
   }
 

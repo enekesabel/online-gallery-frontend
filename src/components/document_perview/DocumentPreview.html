@@ -15,7 +15,8 @@
     <el-dialog
       title="Rename album"
       :visible.sync="renameAlbumDialogVisible">
-      <el-form :model="documentNameForm" label-position="left" label-width="120px" :rules="rules" ref="documentNameForm">
+      <el-form :model="documentNameForm" label-position="left" label-width="120px" :rules="rules"
+               ref="documentNameForm">
         <el-form-item label="Album name" prop="documentName">
           <el-input :placeholder="document.displayName"
                     size="small"

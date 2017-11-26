@@ -64,8 +64,6 @@ const actions = {
     try {
       const oldGroup = getters.getGroup(state, group.id);
       const oldUserIds = oldGroup.userIds;
-      console.log('newgroup', group)
-      console.log('oldUserIds', oldUserIds)
       const userIdsToAdd = [];
       group.userIds.forEach(id => {
         if (oldUserIds.indexOf(id) === -1) {

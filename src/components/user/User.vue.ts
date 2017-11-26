@@ -9,6 +9,7 @@ import {User} from '../../model/User';
 @Component
 export default class UserComponent extends Vue {
   @Prop({
+    default: new User(),
     required: true,
   })
   userId: string

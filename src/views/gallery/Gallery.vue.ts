@@ -36,7 +36,7 @@ export default class Gallery extends Vue {
   };
 
   get childAlbums(): AlbumBase[] {
-    return this.$store.getters.getChildAlbums;
+    return this.album.childAlbums;
   }
 
   get pictures(): PictureBase[] {

@@ -7,7 +7,9 @@ import {AlbumBase} from '../../model/AlbumBase';
 @WithRender
 @Component
 export default class AlbumPreview extends Vue {
-  @Prop()
+  @Prop({
+    default: new AlbumBase()
+  })
   document: AlbumBase;
 
   openAlbum() {
