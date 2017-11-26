@@ -34,6 +34,23 @@ export default class Gallery extends Vue {
     return this.$store.getters.getAlbum;
   }
 
+  get breadcrumbs() {
+    const breadcrumbs = [];
+    for (let i = 0; i < this.album.albumTree.length; i++) {
+      const name = this.album.albumTree[i].name;
+      const lastBreadcrumb = breadcrumbs[i - 1] || {
+        name: '',
+        path: '/albums',
+      };
+
+      breadcrumbs.push({
+        name,
+        path: lastBreadcrumb.path + '/' + name,
+      });
+    }
+    return breadcrumbs;
+  }
+
   handleCommand(command) {
     switch (command) {
     }
@@ -45,9 +62,8 @@ export default class Gallery extends Vue {
 
   @Watch('albumId')
   fetchAlbum() {
-    console.log('albumId changed')
     // load child album when routing to it
-      this.$store.dispatch('fetchDocument', this.albumId);
+    this.$store.dispatch('fetchDocument', this.albumId);
   }
 
 }

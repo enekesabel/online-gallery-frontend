@@ -51,7 +51,7 @@ const actions = {
   async fetchDocument({commit}, documentId: string) {
     try {
       const response = await api.get(documentId);
-      commit(MutationType.SET_ALBUM, response.data);
+      commit(MutationType.SET_ALBUM, new Album(response.data));
     } catch (err) {
       MessageBus.showError('Error occurred when fetching document.');
     }

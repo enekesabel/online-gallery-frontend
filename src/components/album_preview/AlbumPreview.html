@@ -1,8 +1,8 @@
-<el-card class="folder" :body-style="{ padding: '0px' }">
+<el-card class="album" :body-style="{ padding: '0px' }">
   <div slot="header" class="d-flex align-items-center justify-content-between">
     <div>
-      <span class="fa fa-lg fa-folder mr-2 color-info"></span>
       <span class="album-name" @click="openAlbum">
+      <span class="fa fa-lg fa-folder mr-2 color-info"></span>
         <slot name="documentName"></slot>
       </span>
     </div>
