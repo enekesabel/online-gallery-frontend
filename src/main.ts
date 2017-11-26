@@ -24,6 +24,7 @@ Vue.use(VueAxios, axios);
 Vue.router = router;
 Vue.axios.defaults.baseURL = process.env.API_URL;
 Vue.prototype.baseUrl = Vue.axios.defaults.baseURL;
+Vue.prototype.staticUrl = process.env.STATIC_URL;
 
 Vue.use(VueAuth, {
   auth: {

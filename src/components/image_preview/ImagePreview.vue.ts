@@ -18,6 +18,10 @@ export default class ImagePreview extends Vue {
 
   private dialogVisible = false;
 
+  get imageUrl() {
+    return Vue.prototype.staticUrl + '/' + (this.document.thumbnailName || this.document.name);
+  }
+
   openImage() {
     this.dialogVisible = true;
   }

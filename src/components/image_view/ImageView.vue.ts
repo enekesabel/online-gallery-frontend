@@ -16,4 +16,8 @@ export default class ImageView extends Vue {
   @Prop()
   image: Picture;
 
+  get imageUrl() {
+    return Vue.prototype.staticUrl + '/' + (this.image.name);
+  }
+
 }
