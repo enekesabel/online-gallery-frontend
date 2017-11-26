@@ -2,21 +2,21 @@ import {DocumentBaseOptions} from './DocumentBaseOptions';
 import {DocumentType} from './DocumentType';
 import {Serializable} from './Serializable';
 
-export abstract class DocumentBase implements DocumentBaseOptions, Serializable{
-  protected _id: string;
-  protected _name: string;
-  protected _displayName: string;
+export abstract class DocumentBase implements DocumentBaseOptions, Serializable {
+  protected _id: string = '';
+  protected _name: string = '';
+  protected _displayName: string = '';
   protected _ownerUserId: string;
   protected _type: DocumentType;
   protected _parentAlbumId: string;
 
-  constructor(options: DocumentBaseOptions) {
-    this._id = options.id;
-    this._name = options.name;
-    this._displayName = options.displayName;
-    this._ownerUserId = options.ownerUserId;
-    this._parentAlbumId = options.parentAlbumId;
-    this._type = options.type;
+  constructor(options?: DocumentBaseOptions) {
+    this._id = options && options.id;
+    this._name = options && options.name;
+    this._displayName = options && options.displayName;
+    this._ownerUserId = options && options.ownerUserId;
+    this._parentAlbumId = options && options.parentAlbumId;
+    this._type = options && options.type;
   }
 
   get id(): string {

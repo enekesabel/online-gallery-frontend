@@ -7,6 +7,9 @@ import {Album} from '../../model/Album';
 import {AlbumBase} from '../../model/AlbumBase';
 import {PictureBase} from '../../model/PictureBase';
 import {Prop, Watch} from 'vue-property-decorator';
+import dashify from 'dashify';
+import {ShareType} from '../../model/ShareType';
+import {DocumentType} from '../../model/DocumentType';
 
 @WithRender
 @Component({
@@ -21,6 +24,16 @@ export default class Gallery extends Vue {
     default: '',
   })
   private albumId: string;
+  private createAlbumDialogVisible: boolean = false;
+  private newAlbumForm = {
+    name: '',
+  };
+  private rules = {
+    name: [
+      {required: true, message: 'Please input your the album name', trigger: 'blur'},
+      {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
+    ],
+  };
 
   get childAlbums(): AlbumBase[] {
     return this.$store.getters.getChildAlbums;
@@ -53,7 +66,35 @@ export default class Gallery extends Vue {
 
   handleCommand(command) {
     switch (command) {
+      case 'add':
+        this.createAlbumDialogVisible = true;
     }
+  }
+
+  createAlbum() {
+    this.$refs.newAlbumForm.validate((valid) => {
+      if (valid) {
+        this.$store.dispatch('createAlbum', new AlbumBase({
+          id: null,
+          type: DocumentType.ALBUM,
+          name: dashify(this.newAlbumForm.name),
+          displayName: this.newAlbumForm.name,
+          ownerUserId: null,
+          shareType: ShareType.PUBLIC,
+          childCount: 0,
+          parentAlbumId: this.album.id === '' ? null : this.album.id,
+        }));
+        this.createAlbumDialogVisible = false;
+      }
+    });
+  }
+
+  cancelCreateAlbum() {
+    this.createAlbumDialogVisible = false;
+  }
+
+  onClose() {
+    this.$refs.newAlbumForm.resetFields();
   }
 
   mounted() {

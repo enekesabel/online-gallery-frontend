@@ -2,7 +2,8 @@
   <div class="d-flex align-items-center justify-content-between">
     <el-breadcrumb class="my-3" separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">gallery</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="breadcrumb in breadcrumbs" :to="{path: breadcrumb.path}">{{breadcrumb.name}}</el-breadcrumb-item>
+      <el-breadcrumb-item v-for="breadcrumb in breadcrumbs" :to="{path: breadcrumb.path}">{{breadcrumb.name}}
+      </el-breadcrumb-item>
     </el-breadcrumb>
     <el-dropdown trigger="click" slot="button" @command="handleCommand">
       <el-button type="text" class="el-icon-menu"></el-button>
@@ -37,4 +38,19 @@
       </el-upload>
     </el-col>
   </el-row>
+
+  <el-dialog
+    @close="onClose"
+    title="Create new album"
+    :visible.sync="createAlbumDialogVisible">
+    <el-form :model="newAlbumForm" label-position="left" :rules="rules" size="small" ref="newAlbumForm" label-width="120px">
+      <el-form-item label="Name" prop="name">
+        <el-input v-model="newAlbumForm.name"></el-input>
+      </el-form-item>
+    </el-form>
+    <el-button @click="cancelCreateAlbum">Cancel</el-button>
+    <el-button type="primary" @click="createAlbum">Create</el-button>
+    </span>
+  </el-dialog>
+
 </div>

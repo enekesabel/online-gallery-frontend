@@ -30,6 +30,7 @@ class State {
     childAlbums: [],
     pictures: [],
     childCount: 0,
+    albumTree: [],
   });
 }
 
@@ -51,7 +52,7 @@ const actions = {
   async fetchDocument({commit}, documentId: string) {
     try {
       const response = await api.get(documentId);
-      commit(MutationType.SET_ALBUM, new Album(response.data));
+      commit(MutationType.SET_ALBUM, new Album(Object.assign(response.data, response.data.album)));
     } catch (err) {
       MessageBus.showError('Error occurred when fetching document.');
     }
@@ -65,9 +66,14 @@ const actions = {
       MessageBus.showError('Error occurred when deleting document.');
     }
   },
-  async createAlbum({commit}, {album}) {
-
-  }
+  async createAlbum({commit}, album: AlbumBase) {
+    try {
+      const response = await api.create(album);
+      commit(MutationType.ADD_CHILD, new AlbumBase(response.data));
+    } catch (err) {
+      MessageBus.showError('Error occurred when creating album.');
+    }
+  },
 };
 
 const mutations = {
