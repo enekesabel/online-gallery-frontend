@@ -12,7 +12,7 @@
         </el-button>
       </template>
       <div class="ml-4">
-        <template v-if="group.userIds.length>0" >
+        <template v-if="group.userIds.length > 0">
           <user-component v-for="userId in group.userIds" :userId="userId"></user-component>
         </template>
         <p class="m-0" v-else="">This group has no members yet.</p>

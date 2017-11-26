@@ -52,12 +52,45 @@ const actions = {
     }
   },
   async createGroup({commit}, group: Group) {
-    const reponse = await  api.create(group);
-    commit(MutationType.SET_GROUP, new Group(reponse.data));
+    try {
+      const reponse = await  api.create(group);
+      commit(MutationType.SET_GROUP, new Group(reponse.data));
+    } catch (err) {
+      MessageBus.showError('Error occurred when creating group.');
+    }
   },
-  async updateGroup({commit}, group: Group) {
-    const updatedGroup = await  api.update(group.id, group);
-    commit(MutationType.SET_GROUP, updatedGroup);
+  async updateGroup({commit, state}, group: Group) {
+    try {
+      const oldUserIds = getters.getGroup(state, group.id).userIds;
+      console.log('newgroup', group)
+      console.log('oldUserIds', oldUserIds)
+      const userIdsToAdd = [];
+      group.userIds.forEach(id => {
+        if (oldUserIds.indexOf(id) === -1) {
+          userIdsToAdd.push(id);
+        }
+      });
+
+      const userIdsToRemove = [];
+      oldUserIds.forEach(id => {
+        if (group.userIds.indexOf(id) === -1) {
+          userIdsToRemove.push(id);
+        }
+      });
+      let updatedGroupResponse;
+      if (userIdsToAdd.length > 0) {
+        updatedGroupResponse = await api.addUsersToGroup(userIdsToAdd, group.id);
+      }
+      if (userIdsToRemove.length > 0) {
+        updatedGroupResponse = await api.removeUsersFromGroup(userIdsToRemove, group.id);
+      }
+
+      if (updatedGroupResponse) {
+        commit(MutationType.SET_GROUP, new Group(updatedGroupResponse.data));
+      }
+    } catch (err) {
+      MessageBus.showError('Error occurred when updating group.');
+    }
   },
   async deleteGroup({commit}, groupId) {
     try {
@@ -82,7 +115,9 @@ const mutations = {
       return g.id === group.id;
     });
     if (groupIndex !== -1) {
-      state.ownedGroups[groupIndex] = group;
+      const groups = state.ownedGroups.slice();
+      groups[groupIndex] = group;
+      state.ownedGroups = groups;
     } else {
       state.ownedGroups.push(group);
     }

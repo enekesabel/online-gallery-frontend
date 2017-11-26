@@ -9,6 +9,7 @@ export class GroupApi extends AbstractApi<Group> {
   }
 
   async update(id: string, group: Group): Promise<any> {
+    /*
     const oldResponse = await this.get(id);
     const oldUserIds = oldResponse.data.userIds;
 
@@ -28,17 +29,20 @@ export class GroupApi extends AbstractApi<Group> {
 
     await this.addUsersToGroup(userIdsToAdd, id);
     await this.removeUsersFromGroup(userIdsToAdd, id);
+    */
+
+    throw new Error('Not implemented');
   }
 
   async addUsersToGroup(userIds: string[], groupId: string): Promise<any> {
-    await Vue.axios.patch(this.url + '/adduser', {
+    return await Vue.axios.patch(this.url + '/adduser', {
       userIds,
       groupId,
     });
   }
 
   async removeUsersFromGroup(userIds: string[], groupId: string): Promise<any> {
-    await Vue.axios.patch(this.url + '/removeuser', {
+    return await Vue.axios.patch(this.url + '/removeuser', {
       userIds,
       groupId,
     });

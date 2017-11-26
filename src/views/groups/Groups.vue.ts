@@ -4,6 +4,7 @@ import WithRender from './Groups.html?style=./Groups.scss';
 import {Group} from '../../model/Group';
 import UserComponent from '../../components/user/User.vue';
 import GroupEditor from '../../components/group_editor/GroupEditor.vue';
+import {Watch} from 'vue-property-decorator';
 
 @WithRender
 @Component({
@@ -48,5 +49,10 @@ export default class Groups extends Vue {
         message: 'Delete canceled',
       });
     });
+  }
+
+  @Watch('groups', {deep: true})
+  onGroupChange() {
+    console.log('group changed');
   }
 }
