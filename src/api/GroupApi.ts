@@ -48,4 +48,11 @@ export class GroupApi extends AbstractApi<Group> {
     });
   }
 
+  async renameGroup(groupId: string, newName: string) {
+    return await Vue.axios.patch(this.url + '/renamegroup', {
+      groupId,
+      newName,
+    });
+  }
+
 }

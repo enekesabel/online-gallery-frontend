@@ -61,7 +61,8 @@ const actions = {
   },
   async updateGroup({commit, state}, group: Group) {
     try {
-      const oldUserIds = getters.getGroup(state, group.id).userIds;
+      const oldGroup = getters.getGroup(state, group.id);
+      const oldUserIds = oldGroup.userIds;
       console.log('newgroup', group)
       console.log('oldUserIds', oldUserIds)
       const userIdsToAdd = [];
@@ -84,10 +85,14 @@ const actions = {
       if (userIdsToRemove.length > 0) {
         updatedGroupResponse = await api.removeUsersFromGroup(userIdsToRemove, group.id);
       }
+      if (group.name !== oldGroup.name) {
+        updatedGroupResponse = await api.renameGroup(group.id, group.name);
+      }
 
       if (updatedGroupResponse) {
         commit(MutationType.SET_GROUP, new Group(updatedGroupResponse.data));
       }
+
     } catch (err) {
       MessageBus.showError('Error occurred when updating group.');
     }
