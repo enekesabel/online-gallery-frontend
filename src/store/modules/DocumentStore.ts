@@ -1,4 +1,4 @@
-import {DocumentApi} from '../../api/DocumentApi';
+import {AlbumApi} from '../../api/AlbumApi';
 import {DocumentBase} from '../../model/DocumentBase';
 import {Album} from '../../model/Album';
 import {DocumentType} from '../../model/DocumentType';
@@ -12,9 +12,11 @@ import {CommentApi} from '../../api/CommentApi';
 import {Picture} from '../../model/Picture';
 import {PictureOptions} from '../../model/PictureOptions';
 import Vue from 'vue';
+import {PictureApi} from '../../api/PictureApi';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
-const documentApi = new DocumentApi();
+const albumApi = new AlbumApi();
+const pictureApi = new PictureApi();
 const commentApi = new CommentApi();
 
 enum MutationType {
@@ -60,7 +62,7 @@ const getters = {
 const actions = {
   async fetchDocument({commit}, documentId: string) {
     try {
-      const response = await documentApi.get(documentId);
+      const response = await albumApi.get(documentId);
       commit(MutationType.SET_ALBUM, new Album(Object.assign(response.data, response.data.album)));
     } catch (err) {
       console.log(err);
@@ -69,7 +71,7 @@ const actions = {
   },
   async deleteDocument({commit}, documentId: string) {
     try {
-      await documentApi.delete(documentId);
+      await albumApi.delete(documentId);
       MessageBus.showSuccess('Delete completed');
       commit(MutationType.REMOVE_CHILD, documentId);
     } catch (err) {
@@ -79,7 +81,7 @@ const actions = {
   },
   async createAlbum({commit}, album: AlbumBase) {
     try {
-      const response = await documentApi.create(album);
+      const response = await albumApi.create(album);
       commit(MutationType.ADD_CHILD, new AlbumBase(response.data));
     } catch (err) {
       console.log(err);
@@ -88,7 +90,7 @@ const actions = {
   },
   async renameAlbum({commit}, {albumId, newName, newDisplayName}) {
     try {
-      const response = await documentApi.renameAlbum(albumId, newName, newDisplayName);
+      const response = await albumApi.renameAlbum(albumId, newName, newDisplayName);
       commit(MutationType.SET_CHILD, new AlbumBase(response.data));
     } catch (err) {
       console.log(err);
@@ -125,12 +127,12 @@ const actions = {
       commit(MutationType.DELETE_COMMENT, comment);
     } catch (err) {
       console.log(err);
-      MessageBus.showError('Error occurred when deleting comment');
+      MessageBus.showError('Error occurred when deleting comment.');
     }
   },
   async downloadAlbum({commit}, album: Album) {
     try {
-      const albumDownloadApi = new DocumentApi('/albumdownload');
+      const albumDownloadApi = new AlbumApi('/albumdownload');
       const response = await albumDownloadApi.get(album.id || '');
       const a = document.createElement('a');
       a.style = 'display: none';
@@ -142,7 +144,34 @@ const actions = {
 
     } catch (err) {
       console.log(err);
-      MessageBus.showError('Error occurred when downloading album');
+      MessageBus.showError('Error occurred when downloading album.');
+    }
+  },
+  async moveAlbum({commit}, album: Album, newParentId: string) {
+    try {
+      await albumApi.moveAlbum(album.id, newParentId);
+      commit(MutationType.REMOVE_CHILD, album.id);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when moving album.');
+    }
+  },
+  async updatePicture({commit}, picture: PictureBase) {
+    try {
+      const response = await pictureApi.update(picture.id, picture);
+      commit(MutationType.SET_CHILD, new Picture(response.data));
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when updating picture.');
+    }
+  },
+  async movePicture({commit}, picture: Picture, newParentId: string) {
+    try {
+      await pictureApi.movePicture(picture.id, newParentId);
+      commit(MutationType.REMOVE_CHILD, picture.id);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when moving picture.');
     }
   },
 };
