@@ -13,6 +13,7 @@ export default class Home extends Vue {
 
   mounted() {
     this.$store.dispatch('fetchUsers');
+    console.log('auth', this.$auth);
   }
 
 }
