@@ -20,8 +20,4 @@ export default class ImageView extends Vue {
     this.$store.dispatch('getCommentForPicture', this.image);
   }
 
-  get imageUrl() {
-    return Vue.prototype.staticUrl + '/' + (this.image.name);
-  }
-
 }

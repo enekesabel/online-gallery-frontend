@@ -2,6 +2,7 @@ import {PictureBaseOptions} from './PictureBaseOptions';
 import {DocumentType} from './DocumentType';
 import {DocumentBase} from './DocumentBase';
 import {Serializable} from './Serializable';
+import Vue from 'vue';
 
 export class PictureBase extends DocumentBase implements PictureBaseOptions, Serializable {
   protected _type: DocumentType = DocumentType.PICTURE;
@@ -19,6 +20,13 @@ export class PictureBase extends DocumentBase implements PictureBaseOptions, Ser
 
   get thumbnailName(): string {
     return this._thumbnailName;
+  }
+
+  get imageUrl() {
+    return Vue.prototype.staticUrl + '/' + this.name;
+  }
+  get thumbnailImageUrl() {
+    return Vue.prototype.staticUrl + '/' + (this.thumbnailName || this.name);
   }
 
   toObject(): PictureBaseOptions {

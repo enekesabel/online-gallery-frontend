@@ -8,6 +8,7 @@ import AlbumPreview from '../album_preview/AlbumPreview.vue';
 import ImagePreview from '../image_preview/ImagePreview.vue';
 import dashify from 'dashify';
 import {AlbumBase} from '../../model/AlbumBase';
+import {Picture} from "../../model/Picture";
 
 @WithRender
 @Component({
@@ -51,6 +52,23 @@ export default class DocumentPreview extends Vue {
       case 'rename':
         this.renameDocument();
         break;
+      case 'download':
+        this.downloadDocument();
+        break;
+    }
+  }
+
+  downloadDocument() {
+    if (this.document.type === DocumentType.ALBUM) {
+
+    } else {
+      const a = document.createElement('a');
+      a.style = 'display: none';
+      a.href = (<Picture>this.document).imageUrl;
+      a.download = (<Picture>this.document).name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
   }
 
