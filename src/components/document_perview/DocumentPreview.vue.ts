@@ -60,7 +60,7 @@ export default class DocumentPreview extends Vue {
 
   downloadDocument() {
     if (this.document.type === DocumentType.ALBUM) {
-
+      this.$store.dispatch('downloadAlbum', this.document);
     } else {
       const a = document.createElement('a');
       a.style = 'display: none';

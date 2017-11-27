@@ -3,8 +3,8 @@ import {DocumentBase} from '../model/DocumentBase';
 import Vue from 'vue';
 
 export class DocumentApi extends AbstractApi<DocumentBase> {
-  constructor() {
-    super('/albums');
+  constructor(url?: string) {
+    super(url || '/albums');
   }
 
   async update() {
@@ -25,4 +25,5 @@ export class DocumentApi extends AbstractApi<DocumentBase> {
       newParentId,
     });
   }
+
 }

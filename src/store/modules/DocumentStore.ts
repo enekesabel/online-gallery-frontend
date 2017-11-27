@@ -11,6 +11,7 @@ import MessageBus from '../../components/message_bus/MessageBus.vue';
 import {CommentApi} from '../../api/CommentApi';
 import {Picture} from '../../model/Picture';
 import {PictureOptions} from '../../model/PictureOptions';
+import Vue from 'vue';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
 const documentApi = new DocumentApi();
@@ -62,7 +63,7 @@ const actions = {
       const response = await documentApi.get(documentId);
       commit(MutationType.SET_ALBUM, new Album(Object.assign(response.data, response.data.album)));
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when fetching document.');
     }
   },
@@ -72,7 +73,7 @@ const actions = {
       MessageBus.showSuccess('Delete completed');
       commit(MutationType.REMOVE_CHILD, documentId);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when deleting document.');
     }
   },
@@ -81,7 +82,7 @@ const actions = {
       const response = await documentApi.create(album);
       commit(MutationType.ADD_CHILD, new AlbumBase(response.data));
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when creating album.');
     }
   },
@@ -90,7 +91,7 @@ const actions = {
       const response = await documentApi.renameAlbum(albumId, newName, newDisplayName);
       commit(MutationType.SET_CHILD, new AlbumBase(response.data));
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when renaming album.');
     }
   },
@@ -114,7 +115,7 @@ const actions = {
       const response = await commentApi.create(comment);
       commit(MutationType.ADD_COMMENT, new Comment(response.data));
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when commenting picture');
     }
   },
@@ -123,8 +124,25 @@ const actions = {
       await commentApi.delete(comment.id);
       commit(MutationType.DELETE_COMMENT, comment);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       MessageBus.showError('Error occurred when deleting comment');
+    }
+  },
+  async downloadAlbum({commit}, album: Album) {
+    try {
+      const albumDownloadApi = new DocumentApi('/albumdownload');
+      const response = await albumDownloadApi.get(album.id || '');
+      const a = document.createElement('a');
+      a.style = 'display: none';
+      a.href = Vue.prototype.staticUrl + '/' + response.data;
+      a.download = response.data;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when downloading album');
     }
   },
 };

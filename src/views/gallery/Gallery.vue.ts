@@ -11,7 +11,7 @@ import {Prop, Watch} from 'vue-property-decorator';
 import dashify from 'dashify';
 import {ShareType} from '../../model/ShareType';
 import {DocumentType} from '../../model/DocumentType';
-import { Message } from 'element-ui';
+import {Message} from 'element-ui';
 
 @WithRender
 @Component({
@@ -89,7 +89,15 @@ export default class Gallery extends Vue {
     switch (command) {
       case 'add':
         this.createAlbumDialogVisible = true;
+        break;
+      case 'download':
+        this.downloadAlbum();
+        break;
     }
+  }
+
+  downloadAlbum() {
+    this.$store.dispatch('downloadAlbum', this.album);
   }
 
   createAlbum() {
