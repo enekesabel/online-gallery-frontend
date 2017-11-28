@@ -8,9 +8,7 @@ import AlbumPreview from '../album_preview/AlbumPreview.vue';
 import ImagePreview from '../image_preview/ImagePreview.vue';
 import dashify from 'dashify';
 import {AlbumBase} from '../../model/AlbumBase';
-import {Picture} from "../../model/Picture";
-import {PictureBase} from "../../model/PictureBase";
-import {PictureBaseOptions} from "../../model/PictureBaseOptions";
+import {Picture} from '../../model/Picture';
 import {PictureOptions} from 'model/PictureOptions';
 
 @WithRender
@@ -28,6 +26,14 @@ export default class DocumentPreview extends Vue {
   private document: DocumentBase;
   private renameAlbumDialogVisible: boolean = false;
   private editPictureDialogVisible: boolean = false;
+  private moveDialogVisible: boolean = false;
+
+  private defaultProps = {
+    children: 'childAlbums',
+    label: 'displayName',
+  };
+
+  private selectedAlbumId;
 
   private albumForm = {
     documentName: '',
@@ -52,6 +58,10 @@ export default class DocumentPreview extends Vue {
     ],
   };
 
+  mounted() {
+    this.selectedAlbumId = this.document.id;
+  }
+
   get componentToCreate() {
     if (this.document.type === DocumentType.PICTURE) {
       return 'image-preview';
@@ -70,6 +80,9 @@ export default class DocumentPreview extends Vue {
         break;
       case 'download':
         this.downloadDocument();
+        break;
+      case 'move':
+        this.moveDialogVisible = true;
         break;
     }
   }
@@ -132,6 +145,36 @@ export default class DocumentPreview extends Vue {
     this.renameAlbumDialogVisible = false;
     this.editPictureDialogVisible = false;
   }
+
+  get albumHierarchy() {
+    return this.$store.getters.getAlbumHierarchy;
+  }
+
+  onMovedialogOpen() {
+    this.$store.dispatch('fetchAlbumHierarchy');
+  }
+
+  moveDocument() {
+    if (this.selectedAlbumId !== this.document.id) {
+      if (this.document.type === DocumentType.ALBUM) {
+        this.$store.dispatch('moveAlbum', {album: this.document, newParentId: this.selectedAlbumId});
+      } else {
+        this.$store.dispatch('movePicture', {picture: this.document, newParentId: this.selectedAlbumId});
+      }
+    }
+    this.moveDialogVisible = false;
+    this.selectedAlbumId = this.document.id;
+  }
+
+  cancelMove() {
+    this.moveDialogVisible = false;
+    this.selectedAlbumId = this.document.id;
+  }
+
+  selectAlbum(data) {
+    this.selectedAlbumId = data.id;
+  }
+
 
   openDeleteConfirmation() {
     this.$confirm('This will permanently delete the file. Continue?', 'Warning', {

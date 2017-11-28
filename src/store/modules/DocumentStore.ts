@@ -29,6 +29,7 @@ enum MutationType {
   DELETE_COMMENT = 'DELETE_COMMENT',
   SET_COMMENTS = 'SET_COMMENTS',
   SET_ALBUM_HIERARCHY = 'SET_ALBUM_HIERARCHY',
+  MOVE_DOCUMENT = 'MOVE_DOCUMENT',
 }
 
 class State {
@@ -155,10 +156,11 @@ const actions = {
       MessageBus.showError('Error occurred when downloading album.');
     }
   },
-  async moveAlbum({commit}, album: Album, newParentId: string) {
+  async moveAlbum({commit}, {album, newParentId}) {
     try {
       await albumApi.moveAlbum(album.id, newParentId);
-      commit(MutationType.REMOVE_CHILD, album.id);
+      commit(MutationType.MOVE_DOCUMENT, {document: album, newParentId});
+      MessageBus.showSuccess('Album successfully moved.');
     } catch (err) {
       console.log(err);
       MessageBus.showError('Error occurred when moving album.');
@@ -182,19 +184,26 @@ const actions = {
       MessageBus.showError('Error occurred when deleting picture.');
     }
   },
-  async movePicture({commit}, picture: Picture, newParentId: string) {
+  async movePicture({commit}, {picture, newParentId}) {
     try {
+      console.log(picture, newParentId)
       await pictureApi.movePicture(picture.id, newParentId);
-      commit(MutationType.REMOVE_CHILD, picture.id);
+      commit(MutationType.MOVE_DOCUMENT, {document: picture, newParentId});
+      MessageBus.showSuccess('Picture successfully moved.');
     } catch (err) {
       console.log(err);
       MessageBus.showError('Error occurred when moving picture.');
     }
   },
-  async getAlbumHierarchy({commit}) {
+  async fetchAlbumHierarchy({commit}) {
     try {
       const albumHierarchyApi = new AlbumApi('/albumhierarchy');
       const response = await albumHierarchyApi.getAll();
+
+      if (response.data.displayName === '<root>') {
+        response.data.displayName = 'Gallery';
+      }
+
       commit(MutationType.SET_ALBUM_HIERARCHY, response.data);
     } catch (err) {
       console.log(err);
@@ -248,6 +257,17 @@ const mutations = {
       if (index !== -1) {
         state.album.pictures.splice(index, 1);
       }
+    }
+  },
+  [MutationType.MOVE_DOCUMENT](state: State, {document, newParentId}) {
+    mutations[MutationType.REMOVE_CHILD](state, document.id);
+
+    // if document is moved to current album's child
+    const child = state.album.childAlbums.find((c => {
+      return c.id === newParentId;
+    }));
+    if (child) {
+      child.childCount++;
     }
   },
   [MutationType.SET_CHILD](state: State, child: DocumentBase) {

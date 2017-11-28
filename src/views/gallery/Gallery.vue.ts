@@ -46,7 +46,7 @@ export default class Gallery extends Vue {
 
   get fileUploadData() {
     return {
-      albumId: this.album.id,
+      albumId: this.album.id || '',
       filesToUpload: this.fileList,
     };
   }

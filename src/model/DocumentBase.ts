@@ -3,7 +3,7 @@ import {DocumentType} from './DocumentType';
 import {Serializable} from './Serializable';
 
 export abstract class DocumentBase implements DocumentBaseOptions, Serializable {
-  protected _id: string = '';
+  protected _id: string = null;
   protected _name: string = '';
   protected _displayName: string = '';
   protected _ownerUserId: string;
@@ -11,7 +11,7 @@ export abstract class DocumentBase implements DocumentBaseOptions, Serializable 
   protected _parentAlbumId: string;
 
   constructor(options?: DocumentBaseOptions) {
-    this._id = options && options.id;
+    this._id = options && options.id || null;
     this._name = options && options.name;
     this._displayName = options && options.displayName;
     this._ownerUserId = options && options.ownerUserId;
