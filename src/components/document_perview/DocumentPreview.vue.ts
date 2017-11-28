@@ -139,7 +139,11 @@ export default class DocumentPreview extends Vue {
       cancelButtonText: 'Cancel',
       type: 'warning',
     }).then(() => {
-      this.$store.dispatch('deleteDocument', this.document.id);
+      if (this.document.type === DocumentType.ALBUM) {
+        this.$store.dispatch('deleteAlbum', this.document.id);
+      } else {
+        this.$store.dispatch('deletePicture', this.document.id);
+      }
     }).catch(() => {
       this.$message({
         type: 'info',

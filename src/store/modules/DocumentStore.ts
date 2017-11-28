@@ -69,7 +69,7 @@ const actions = {
       MessageBus.showError('Error occurred when fetching document.');
     }
   },
-  async deleteDocument({commit}, documentId: string) {
+  async deleteAlbum({commit}, documentId: string) {
     try {
       await albumApi.delete(documentId);
       MessageBus.showSuccess('Delete completed');
@@ -163,6 +163,15 @@ const actions = {
     } catch (err) {
       console.log(err);
       MessageBus.showError('Error occurred when updating picture.');
+    }
+  },
+  async deletePicture({commit}, pictureId: string) {
+    try {
+      await pictureApi.delete(pictureId);
+      commit(MutationType.REMOVE_CHILD, pictureId);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when deleting picture.');
     }
   },
   async movePicture({commit}, picture: Picture, newParentId: string) {
