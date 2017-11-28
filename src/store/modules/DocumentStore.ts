@@ -13,6 +13,7 @@ import {Picture} from '../../model/Picture';
 import {PictureOptions} from '../../model/PictureOptions';
 import Vue from 'vue';
 import {PictureApi} from '../../api/PictureApi';
+import {AlbumHierarchy} from '../../model/AlbumHierarchy';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
 const albumApi = new AlbumApi();
@@ -27,6 +28,7 @@ enum MutationType {
   ADD_COMMENT = 'ADD_COMMENT',
   DELETE_COMMENT = 'DELETE_COMMENT',
   SET_COMMENTS = 'SET_COMMENTS',
+  SET_ALBUM_HIERARCHY = 'SET_ALBUM_HIERARCHY',
 }
 
 class State {
@@ -43,19 +45,25 @@ class State {
     childCount: 0,
     albumTree: [],
   });
+  albumHierarchy: AlbumHierarchy = {
+    id: null,
+    displayName: 'gallery',
+    childAlbums: [],
+  };
 }
 
 const getters = {
   getAlbum(state: State): Album {
     return state.album;
   },
-
   getChildAlbums(state: State): AlbumBase[] {
     return state.album.childAlbums;
   },
-
   getPictures(state: State): PictureBase[] {
     return state.album.pictures;
+  },
+  getAlbumHierarchy(state: State): AlbumHierarchy {
+    return state.albumHierarchy;
   },
 };
 
@@ -183,9 +191,40 @@ const actions = {
       MessageBus.showError('Error occurred when moving picture.');
     }
   },
+  async getAlbumHierarchy({commit}) {
+    try {
+      const albumHierarchyApi = new AlbumApi('/albumhierarchy');
+      const response = await albumHierarchyApi.getAll();
+      commit(MutationType.SET_ALBUM_HIERARCHY, response.data);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when fetching album hierarchy.');
+    }
+  },
+  async searchPictures({commit}, keyword: string) {
+    const pictureSearchApi = new PictureApi('/search/byname');
+    const response = await pictureSearchApi.get(keyword);
+    const searchAlbum = new Album({
+      id: null,
+      displayName: 'results',
+      name: 'results',
+      type: DocumentType.ALBUM,
+      childCount: response.data.length,
+      childAlbums: [],
+      shareType: ShareType.PUBLIC,
+      ownerUserId: '',
+      albumTree: [],
+      parentAlbumId: null,
+      pictures: response.data,
+    });
+    commit(MutationType.SET_ALBUM, searchAlbum);
+  },
 };
 
 const mutations = {
+  [MutationType.SET_ALBUM_HIERARCHY](state: State, albumHierarchy: AlbumHierarchy) {
+    state.albumHierarchy = albumHierarchy;
+  },
   [MutationType.SET_ALBUM](state: State, album: Album) {
     state.album = album;
   },

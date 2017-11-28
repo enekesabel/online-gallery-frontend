@@ -26,6 +26,7 @@ export default class Gallery extends Vue {
     default: '',
   })
   private albumId: string;
+  private searchQuery: string = '';
   private createAlbumDialogVisible: boolean = false;
   private newAlbumForm = {
     name: '',
