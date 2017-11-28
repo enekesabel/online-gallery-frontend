@@ -1,25 +1,27 @@
 <div>
   <div class="d-flex align-items-center justify-content-between">
-    <el-breadcrumb class="my-3" separator-class="el-icon-arrow-right">
+    <el-breadcrumb v-if="!searchMode" class="my-3" separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">gallery</el-breadcrumb-item>
       <el-breadcrumb-item v-for="breadcrumb in breadcrumbs" :to="{path: breadcrumb.path}">{{breadcrumb.name}}
       </el-breadcrumb-item>
     </el-breadcrumb>
+    <h4 v-if="searchMode">Results</h4>
     <div class="d-flex align-items-center">
       <el-input
+        @keyup.enter.native="search()"
         class="mr-3"
         size="small"
         placeholder="Type something"
         prefix-icon="el-icon-search"
         v-model="searchQuery">
       </el-input>
-      <el-dropdown trigger="click" slot="button" @command="handleCommand">
-      <el-button type="text" class="el-icon-menu"></el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="download">Download all</el-dropdown-item>
-        <el-dropdown-item command="add">Create album</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+      <el-dropdown v-if="!searchMode" trigger="click" slot="button" @command="handleCommand">
+        <el-button type="text" class="el-icon-menu"></el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="download">Download all</el-dropdown-item>
+          <el-dropdown-item command="add">Create album</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
   <el-row :gutter="10">
@@ -32,10 +34,16 @@
       <document-preview :document="child"></document-preview>
     </el-col>
   </el-row>
+  <el-row v-if="pictures.length === 0 && childAlbums.length === 0">
+    <el-col :sm="24" class="text-center my-4">
+      <p>There are no images heres.</p>
+    </el-col>
+  </el-row>
   <el-row class="mt-5">
     <el-col :sm="24" class="text-center">
       <el-upload
         drag
+        v-if="!searchMode"
         :data="fileUploadData"
         :action="fileUploadAction"
         :headers="fileUploadHeaders"

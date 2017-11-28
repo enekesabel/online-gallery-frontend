@@ -26,6 +26,10 @@ export default class Gallery extends Vue {
     default: '',
   })
   private albumId: string;
+  @Prop({
+    default: false,
+  })
+  private searchMode: boolean;
   private searchQuery: string = '';
   private createAlbumDialogVisible: boolean = false;
   private newAlbumForm = {
@@ -119,6 +123,11 @@ export default class Gallery extends Vue {
     });
   }
 
+  search() {
+    this.$router.push({name: 'search'});
+    this.$store.dispatch('searchPictures', this.searchQuery);
+  }
+
   cancelCreateAlbum() {
     this.createAlbumDialogVisible = false;
   }
@@ -153,8 +162,16 @@ export default class Gallery extends Vue {
     this.fetchAlbum();
   }
 
+  @Watch('$route')
+  resetSearch() {
+    if (this.$route.path === '/albums/'){
+      this.fetchAlbum();
+    }
+  }
+
   @Watch('albumId')
   fetchAlbum() {
+    this.searchQuery = '';
     // load child album when routing to it
     this.$store.dispatch('fetchDocument', this.albumId);
   }

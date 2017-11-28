@@ -5,11 +5,13 @@ export class User implements UserOptions, Serializable {
   private _id: string = null;
   private _name: string = '';
   private _emailAddress: string = '';
+  private password: string = '';
 
   constructor(options?: UserOptions) {
     this._id = options && options.id;
     this._name = options && options.name;
     this._emailAddress = options && options.emailAddress;
+    this.password = options && options.password || '';
   }
 
   get id(): string {
@@ -37,6 +39,7 @@ export class User implements UserOptions, Serializable {
       id: this.id,
       name: this.name,
       emailAddress: this.emailAddress,
+      password: this.password,
     };
   }
 }

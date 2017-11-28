@@ -52,7 +52,21 @@ export default new Router({
           path: '/groups',
           name: 'groups',
           component: Groups,
-        }
+        },
+        {
+          path: '/settings',
+          name: 'settings',
+          component: Settings,
+        },
+        {
+          path: '/search',
+          name: 'search',
+          component: Gallery,
+          props: {
+            searchMode: true,
+            albumId: '',
+          },
+        },
       ],
     },
     {

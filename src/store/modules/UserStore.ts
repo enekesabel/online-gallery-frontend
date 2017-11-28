@@ -1,6 +1,7 @@
 import {User} from '../../model/User';
 import {UserApi} from '../../api/UserApi';
 import MessageBus from '../../components/message_bus/MessageBus.vue';
+import Vue from 'vue';
 
 const api = new UserApi();
 
@@ -28,7 +29,17 @@ const actions = {
       MessageBus.showError('Error occurred when retrieving users.');
     }
   },
+  async updateUser({commit}, user: User) {
+    try {
+      const response = await api.update(user.id, user);
+      MessageBus.showSuccess('Successfully updated!.');
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when updating users.');
+    }
+  },
 };
+
 
 const mutations = {
   [MutationType.SET_USERS](state: State, users: User[]) {
