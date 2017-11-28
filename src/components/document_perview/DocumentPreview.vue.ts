@@ -9,6 +9,9 @@ import ImagePreview from '../image_preview/ImagePreview.vue';
 import dashify from 'dashify';
 import {AlbumBase} from '../../model/AlbumBase';
 import {Picture} from "../../model/Picture";
+import {PictureBase} from "../../model/PictureBase";
+import {PictureBaseOptions} from "../../model/PictureBaseOptions";
+import {PictureOptions} from 'model/PictureOptions';
 
 @WithRender
 @Component({
@@ -24,14 +27,27 @@ export default class DocumentPreview extends Vue {
   })
   private document: DocumentBase;
   private renameAlbumDialogVisible: boolean = false;
+  private editPictureDialogVisible: boolean = false;
 
-  private documentNameForm = {
+  private albumForm = {
     documentName: '',
   };
 
   private rules = {
-    documentName: [
+    pictureName: [
       {required: true, message: 'Please input the album name', trigger: 'blur'},
+      {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
+    ],
+  };
+
+  private pictureForm = {
+    pictureName: '',
+    description: '',
+  };
+
+  private pictureRules = {
+    pictureName: [
+      {required: true, message: 'Please input the picture name', trigger: 'blur'},
       {min: 3, message: 'Length should be at least 3 characters', trigger: 'blur'},
     ],
   };
@@ -49,8 +65,8 @@ export default class DocumentPreview extends Vue {
       case 'delete':
         this.openDeleteConfirmation();
         break;
-      case 'rename':
-        this.renameDocument();
+      case 'edit':
+        this.editDocument();
         break;
       case 'download':
         this.downloadDocument();
@@ -72,27 +88,49 @@ export default class DocumentPreview extends Vue {
     }
   }
 
-  saveDocumentName() {
-    this.$refs.documentNameForm.validate((valid) => {
-      if (valid) {
-        this.$store.dispatch('renameAlbum', {
-          albumId: this.document.id,
-          newName: dashify(this.documentNameForm.documentName),
-          newDisplayName: this.documentNameForm.documentName,
-        });
-        this.renameAlbumDialogVisible = false;
-      }
-    });
+  saveDocument() {
+    if (this.document.type === DocumentType.PICTURE) {
+      this.$refs.pictureForm.validate((valid) => {
+        if (valid) {
+          const newPictureOptions: PictureOptions = Object.assign({}, (<Picture>this.document).toObject(), {
+            displayName: this.pictureForm.pictureName,
+            description: this.pictureForm.description,
+          });
+
+          this.$store.dispatch('updatePicture', new Picture(newPictureOptions));
+          this.editPictureDialogVisible = false;
+        }
+      });
+    } else {
+      this.$refs.albumForm.validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('renameAlbum', {
+            albumId: this.document.id,
+            newName: dashify(this.albumForm.documentName),
+            newDisplayName: this.albumForm.documentName,
+          });
+          this.renameAlbumDialogVisible = false;
+        }
+      });
+    }
   }
 
-  renameDocument() {
-    this.renameAlbumDialogVisible = true;
-    this.documentNameForm.documentName = this.document.displayName || this.document.name || '';
+  editDocument() {
+    if (this.document.type === DocumentType.PICTURE) {
+      this.editPictureDialogVisible = true;
+      this.pictureForm.pictureName = this.document.displayName || this.document.name || '';
+      this.pictureForm.description = (<Picture>this.document).description || '';
+    } else {
+      this.renameAlbumDialogVisible = true;
+      this.albumForm.documentName = this.document.displayName || this.document.name || '';
+    }
   }
 
-  cancelRename() {
-    this.$refs.documentNameInput.resetFields();
+  cancelEdit() {
+    this.$refs.pictureForm && this.$refs.pictureForm.resetFields();
+    this.$refs.albumForm && this.$refs.albumForm.resetFields();
     this.renameAlbumDialogVisible = false;
+    this.editPictureDialogVisible = false;
   }
 
   openDeleteConfirmation() {
@@ -115,7 +153,7 @@ export default class DocumentPreview extends Vue {
     deep: true,
   })
   onDocumentNameChange(val) {
-    this.documentNameForm.documentName = val;
+    this.albumForm.documentName = val;
   }
 
 }

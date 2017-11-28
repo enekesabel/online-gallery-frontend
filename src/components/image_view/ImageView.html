@@ -1,12 +1,19 @@
-<el-row class="mr-0">
+<el-row :gutter="10" class="mr-0">
   <el-col :sm="24" :md="16" class="text-center">
     <img :src="image.imageUrl" class="img-fluid">
-    <p class="text-left">
-      Created at: {{image.createdAt}}
-    </p>
   </el-col>
   <el-col :md="8">
+    <h5>Description</h5>
     <p>{{image.description}}</p>
+    <template v-if="image.metaData">
+      <h5>Details</h5>
+      <p>
+        Measures: {{image.metaData.width + ' x ' + image.metaData.height}}
+      </p>
+      <p>
+        Size: {{ image.metaData.size + ' bytes' }}
+      </p>
+    </template>
   </el-col>
   <el-col>
     <comments :picture="image"></comments>

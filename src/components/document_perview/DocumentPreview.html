@@ -8,7 +8,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="share">Share</el-dropdown-item>
         <el-dropdown-item command="move">Move</el-dropdown-item>
-        <el-dropdown-item command="rename">Rename</el-dropdown-item>
+        <el-dropdown-item command="edit">Edit</el-dropdown-item>
         <el-dropdown-item command="download">Download</el-dropdown-item>
         <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
       </el-dropdown-menu>
@@ -16,18 +16,37 @@
     <el-dialog
       title="Rename album"
       :visible.sync="renameAlbumDialogVisible">
-      <el-form :model="documentNameForm" label-position="left" label-width="120px" :rules="rules"
-               ref="documentNameForm">
+      <el-form :model="albumForm" label-position="left" label-width="120px" :rules="rules"
+               ref="albumForm">
         <el-form-item label="Album name" prop="documentName">
           <el-input :placeholder="document.displayName"
                     size="small"
-                    ref="documentNameInput"
-                    v-model="documentNameForm.documentName">
+                    v-model="albumForm.documentName">
           </el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="cancelRename">Cancel</el-button>
-      <el-button type="primary" @click="saveDocumentName">Save</el-button>
+      <el-button @click="cancelEdit">Cancel</el-button>
+      <el-button type="primary" @click="saveDocument">Save</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Edit picture"
+      :visible.sync="editPictureDialogVisible">
+      <el-form :model="pictureForm" label-position="left" label-width="120px" :rules="pictureRules"
+               ref="pictureForm">
+        <el-form-item label="Picture name" prop="pictureName">
+          <el-input :placeholder="document.displayName"
+                    size="small"
+                    v-model="pictureForm.pictureName">
+          </el-input>
+          <el-input placeholder="Add description to this image"
+                    type="textarea"
+                    autosize
+                    v-model="pictureForm.description">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <el-button @click="cancelEdit">Cancel</el-button>
+      <el-button type="primary" @click="saveDocument">Save</el-button>
     </el-dialog>
   </template>
 </component>

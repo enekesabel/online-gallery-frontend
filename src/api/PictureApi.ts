@@ -14,4 +14,8 @@ export class PictureApi extends AbstractApi<PictureBase> {
     });
   }
 
+  async update(id: string, picture: PictureBase): Promise<any> {
+    return await Vue.axios.patch(this.url, picture.toObject());
+  }
+
 }
