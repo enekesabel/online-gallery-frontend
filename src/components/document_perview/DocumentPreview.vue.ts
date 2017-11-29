@@ -10,6 +10,10 @@ import dashify from 'dashify';
 import {AlbumBase} from '../../model/AlbumBase';
 import {Picture} from '../../model/Picture';
 import {PictureOptions} from 'model/PictureOptions';
+import {Share} from '../../model/Share';
+import {User} from '../../model/User';
+import {Group} from 'model/Group';
+import {DocumentShareType} from '../../model/ShareOptions';
 
 @WithRender
 @Component({
@@ -27,6 +31,9 @@ export default class DocumentPreview extends Vue {
   private renameAlbumDialogVisible: boolean = false;
   private editPictureDialogVisible: boolean = false;
   private moveDialogVisible: boolean = false;
+  private shareDialogVisible: boolean = false;
+  private sharedUserIds: string[] = [];
+  private sharedGroupIds: string[] = [];
 
   private defaultProps = {
     children: 'childAlbums',
@@ -83,6 +90,9 @@ export default class DocumentPreview extends Vue {
         break;
       case 'move':
         this.moveDialogVisible = true;
+        break;
+      case 'share':
+        this.shareDialogVisible = true;
         break;
     }
   }
@@ -150,7 +160,7 @@ export default class DocumentPreview extends Vue {
     return this.$store.getters.getAlbumHierarchy;
   }
 
-  onMovedialogOpen() {
+  onMoveDialogOpen() {
     this.$store.dispatch('fetchAlbumHierarchy');
   }
 
@@ -175,6 +185,150 @@ export default class DocumentPreview extends Vue {
     this.selectedAlbumId = data.id;
   }
 
+
+  get shares(): Share[] {
+    return this.$store.getters.getShares;
+  }
+
+  get users(): User[] {
+    if (this.$store) {
+      return this.$store.getters.getUsers;
+    } else {
+      return [];
+    }
+  }
+
+  get groups(): Group[] {
+    if (this.$store) {
+      return this.$store.getters.getOwnedGroups;
+    } else {
+      return [];
+    }
+  }
+
+  get usersSharedWithIds(): string[] {
+    const users = [];
+    this.shares.forEach(s => {
+      if (s.shareType === DocumentShareType.PERSON) {
+        const user = this.users.find(u => {
+          return u.id === s.sharedWithId;
+        });
+        users.push(user.id);
+      }
+    });
+    return users;
+  }
+
+  get groupsSharedWithIds(): string[] {
+    const groups = [];
+    this.shares.forEach(s => {
+      if (s.shareType === DocumentShareType.GROUP) {
+        const group = this.groups.find(g => {
+          return g.id === s.sharedWithId;
+        });
+        groups.push(group.id);
+      }
+    });
+    return groups;
+  }
+
+  get newUserShareIdsToAdd(): string[] {
+    const userIdsToAdd = [];
+    this.sharedUserIds.forEach(id => {
+      if (this.usersSharedWithIds.indexOf(id) === -1) {
+        userIdsToAdd.push(id);
+      }
+    });
+    return userIdsToAdd;
+  }
+
+  get newGroupShareIdsToAdd(): string[] {
+    const groupIdsToAdd = [];
+    this.sharedGroupIds.forEach(id => {
+      if (this.groupsSharedWithIds.indexOf(id) === -1) {
+        groupIdsToAdd.push(id);
+      }
+    });
+    return groupIdsToAdd;
+  }
+
+  get groupShareIdsToRemove(): string[] {
+    const groupIdsToRemove = [];
+    this.groupsSharedWithIds.forEach(id => {
+      if (this.sharedGroupIds.indexOf(id) === -1) {
+        groupIdsToRemove.push(id);
+      }
+    });
+    const shareIdsToRemove = [];
+    this.shares.forEach(share => {
+      if (share.shareType === DocumentShareType.GROUP &&
+        groupIdsToRemove.indexOf(share.sharedWithId) !== -1) {
+        shareIdsToRemove.push(share.id);
+      }
+    });
+    return shareIdsToRemove;
+  }
+
+  get userShareIdsToRemove(): string[] {
+    const userIdsToRemove = [];
+    this.usersSharedWithIds.forEach(id => {
+      if (this.sharedUserIds.indexOf(id) === -1) {
+        userIdsToRemove.push(id);
+      }
+    });
+    const shareIdsToRemove = [];
+    this.shares.forEach(share => {
+      if (share.shareType === DocumentShareType.PERSON &&
+        userIdsToRemove.indexOf(share.sharedWithId) !== -1) {
+        shareIdsToRemove.push(share.id);
+      }
+    });
+    return shareIdsToRemove;
+  }
+
+  get parsedUsers() {
+    const data = [];
+    this.users.forEach(u => {
+      data.push({
+        key: u.id,
+        label: u.name,
+      });
+    });
+    return data;
+  }
+
+  get parsedGroups() {
+    const data = [];
+    this.groups.forEach(u => {
+      data.push({
+        key: u.id,
+        label: u.name,
+      });
+    });
+    return data;
+  }
+
+  async onShareDialogOpen() {
+    await this.$store.dispatch('fetchSharesOfDocument', this.document);
+    await this.$store.dispatch('fetchUsers', this.document);
+    await this.$store.dispatch('fetchGroups', this.document);
+    this.sharedGroupIds = this.groupsSharedWithIds;
+    this.sharedUserIds = this.usersSharedWithIds;
+  }
+
+  cancelShare() {
+    this.shareDialogVisible = false;
+    this.sharedUserIds = [];
+    this.sharedGroupIds = [];
+  }
+
+  shareDocument() {
+    this.$store.dispatch('shareDocument', {userIds: this.newUserShareIdsToAdd.slice(), groupIds: this.newGroupShareIdsToAdd.slice(), document:this.document});
+    this.$store.dispatch('removeShares', {userIds: this.userShareIdsToRemove.slice(), groupIds: this.groupShareIdsToRemove.slice()});
+    this.shareDialogVisible = false;
+    this.sharedUserIds = [];
+    this.sharedGroupIds = [];
+  }
 
   openDeleteConfirmation() {
     this.$confirm('This will permanently delete the file. Continue?', 'Warning', {

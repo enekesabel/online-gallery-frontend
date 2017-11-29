@@ -14,11 +14,15 @@ import {PictureOptions} from '../../model/PictureOptions';
 import Vue from 'vue';
 import {PictureApi} from '../../api/PictureApi';
 import {AlbumHierarchy} from '../../model/AlbumHierarchy';
+import {ShareApi} from '../../api/ShareApi';
+import {Share} from '../../model/Share';
+import {DocumentShareType} from '../../model/ShareOptions';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
 const albumApi = new AlbumApi();
 const pictureApi = new PictureApi();
 const commentApi = new CommentApi();
+const shareApi = new ShareApi();
 
 enum MutationType {
   SET_ALBUM = 'SET_ALBUM',
@@ -30,6 +34,8 @@ enum MutationType {
   SET_COMMENTS = 'SET_COMMENTS',
   SET_ALBUM_HIERARCHY = 'SET_ALBUM_HIERARCHY',
   MOVE_DOCUMENT = 'MOVE_DOCUMENT',
+  SET_SHARES = 'SET_SHARES',
+  SET_SHARED_WITH_ME = 'SET_SHARED_WITH_ME',
 }
 
 class State {
@@ -51,6 +57,8 @@ class State {
     displayName: 'gallery',
     childAlbums: [],
   };
+  shares: Share[] = [];
+  sharedWidthMe: Picture[][] = [];
 }
 
 const getters = {
@@ -65,6 +73,12 @@ const getters = {
   },
   getAlbumHierarchy(state: State): AlbumHierarchy {
     return state.albumHierarchy;
+  },
+  getShares(state: State): Share[] {
+    return state.shares;
+  },
+  getSharedWithMe(state: State): Picture[][] {
+    return state.sharedWidthMe;
   },
 };
 
@@ -186,7 +200,7 @@ const actions = {
   },
   async movePicture({commit}, {picture, newParentId}) {
     try {
-      console.log(picture, newParentId)
+      console.log(picture, newParentId);
       await pictureApi.movePicture(picture.id, newParentId);
       commit(MutationType.MOVE_DOCUMENT, {document: picture, newParentId});
       MessageBus.showSuccess('Picture successfully moved.');
@@ -211,22 +225,109 @@ const actions = {
     }
   },
   async searchPictures({commit}, keyword: string) {
-    const pictureSearchApi = new PictureApi('/search/byname');
-    const response = await pictureSearchApi.get(keyword);
-    const searchAlbum = new Album({
-      id: null,
-      displayName: 'results',
-      name: 'results',
-      type: DocumentType.ALBUM,
-      childCount: response.data.length,
-      childAlbums: [],
-      shareType: ShareType.PUBLIC,
-      ownerUserId: '',
-      albumTree: [],
-      parentAlbumId: null,
-      pictures: response.data,
-    });
-    commit(MutationType.SET_ALBUM, searchAlbum);
+    try {
+
+      const pictureSearchApi = new PictureApi('/search/byname');
+      const response = await pictureSearchApi.get(keyword);
+      const searchAlbum = new Album({
+        id: null,
+        displayName: 'results',
+        name: 'results',
+        type: DocumentType.ALBUM,
+        childCount: response.data.length,
+        childAlbums: [],
+        shareType: ShareType.PUBLIC,
+        ownerUserId: '',
+        albumTree: [],
+        parentAlbumId: null,
+        pictures: response.data,
+      });
+      commit(MutationType.SET_ALBUM, searchAlbum);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when searching pictures.');
+    }
+  },
+  async removeShares({commit}, {userIds, groupIds}) {
+    try {
+      if (userIds) {
+        userIds.forEach(async id => {
+          await shareApi.delete(id);
+        });
+      }
+      if (groupIds) {
+        groupIds.forEach(async id => {
+          await shareApi.delete(id);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred during sharing document.');
+    }
+  },
+  async shareDocument({commit}, {userIds, groupIds, document}) {
+    try {
+
+      let share: Share;
+      if (groupIds) {
+        groupIds.forEach(async id => {
+          share = new Share({
+            id: null,
+            sharedWithId: id,
+            contentType: document.type,
+            shareType: DocumentShareType.GROUP,
+            contentId: document.id,
+          });
+          await shareApi.create(share);
+        });
+      }
+      if (userIds) {
+        userIds.forEach(async id => {
+          share = new Share({
+            id: null,
+            sharedWithId: id,
+            contentType: document.type,
+            shareType: DocumentShareType.PERSON,
+            contentId: document.id,
+          });
+          await shareApi.create(share);
+        });
+      }
+      MessageBus.showSuccess('Successfully shared document.');
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred during sharing document.');
+    }
+  },
+  async fetchSharesOfDocument({commit}, document: DocumentBase) {
+    try {
+      const response = await shareApi.getSharesOfDocument(document);
+      const shares = [];
+      response.data.forEach(s => {
+        shares.push(new Share(s));
+      });
+      commit(MutationType.SET_SHARES, shares);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when trying to fetch shares.');
+    }
+  },
+  async fetchSharedWithMe({commit}) {
+    try {
+      const response = await shareApi.sharedWithMe();
+      const pictureArrays = [];
+      response.data.forEach(pictureArray => {
+        const pictures = [];
+        pictureArray.forEach(p => {
+          pictures.push(new Picture(p));
+        });
+        pictureArrays.push(pictures);
+      });
+      commit(MutationType.SET_SHARED_WITH_ME, pictureArrays);
+    } catch (err) {
+      console.log(err);
+      MessageBus.showError('Error occurred when trying to fetch pictures shared with you.');
+    }
   },
 };
 
@@ -315,6 +416,12 @@ const mutations = {
     if (commentIndex !== -1) {
       picture.comments.splice(commentIndex, 1);
     }
+  },
+  [MutationType.SET_SHARES](state: State, shares: Share[]) {
+    state.shares = shares;
+  },
+  [MutationType.SET_SHARED_WITH_ME](state: State, sharedWithMe: Picture[][]) {
+    state.sharedWidthMe = sharedWithMe;
   },
 };
 
