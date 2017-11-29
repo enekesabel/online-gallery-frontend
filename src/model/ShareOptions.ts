@@ -9,8 +9,8 @@ export type ShareOptions = HasId & {
 
 
 export enum ShareContentType {
-  IMAGE = 'IMAGE',
-  PERSON = 'PERSON',
+  PICTURE = 'PICTURE',
+  ALBUM = 'ALBUM',
 }
 
 export enum DocumentShareType {

@@ -16,7 +16,7 @@ import {PictureApi} from '../../api/PictureApi';
 import {AlbumHierarchy} from '../../model/AlbumHierarchy';
 import {ShareApi} from '../../api/ShareApi';
 import {Share} from '../../model/Share';
-import {DocumentShareType} from '../../model/ShareOptions';
+import {DocumentShareType, ShareContentType} from '../../model/ShareOptions';
 
 const factory: DocumentBaseFactory = new DocumentBaseFactory();
 const albumApi = new AlbumApi();
@@ -268,13 +268,16 @@ const actions = {
   async shareDocument({commit}, {userIds, groupIds, document}) {
     try {
 
+      const contentType: ShareContentType = document.type === DocumentType.PICTURE? ShareContentType.PICTURE : ShareContentType.ALBUM;
+
       let share: Share;
       if (groupIds) {
         groupIds.forEach(async id => {
+
           share = new Share({
             id: null,
             sharedWithId: id,
-            contentType: document.type,
+            contentType,
             shareType: DocumentShareType.GROUP,
             contentId: document.id,
           });
@@ -286,7 +289,7 @@ const actions = {
           share = new Share({
             id: null,
             sharedWithId: id,
-            contentType: document.type,
+            contentType,
             shareType: DocumentShareType.PERSON,
             contentId: document.id,
           });
