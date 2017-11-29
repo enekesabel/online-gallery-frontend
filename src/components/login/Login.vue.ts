@@ -15,8 +15,8 @@ export default class Login extends Vue {
 
   private rules = {
     email: [
-      {required: true, message: 'Please input your emailAddress address', trigger: 'blur'},
-      {type: 'email', message: 'Please input a valid emailAddress address', trigger: 'blur'},
+      {required: true, message: 'Please input your email address', trigger: 'blur'},
+      {type: 'email', message: 'Please input a valid email address', trigger: 'blur'},
     ],
     password: [
       {required: true, message: 'Please input your password'},
@@ -31,14 +31,9 @@ export default class Login extends Vue {
           headers: {
             'Content-type': 'application/json',
           },
-          success(re) {
-            Vue.axios({
-              url: '/usergroups',
-              method: 'GET',
-            }).then(res => {
-              console.log(res);
-            }).catch(err => {
-              console.log(err);
+          success(res) {
+            Vue.axios.get('/users/' + res.data.id).then(response => {
+              this.$auth.user(response.data);
             });
           },
           error(err) {
@@ -48,13 +43,6 @@ export default class Login extends Vue {
             });
           },
         });
-        /*
-        Vue.axios.post('/users/login', this.loginForm, {withCredentials: true}).then(res => {
-          console.log(res);
-        }).catch(err => {
-          console.log(err);
-        });
-        */
       } else {
         return false;
       }

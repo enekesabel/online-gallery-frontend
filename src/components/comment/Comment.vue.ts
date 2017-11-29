@@ -26,4 +26,8 @@ export default class CommentComponent extends Vue {
   removeComment() {
     this.$store.dispatch('deleteComment', this.comment);
   }
+
+  get userId() {
+    return this.$auth.user().id;
+  }
 }

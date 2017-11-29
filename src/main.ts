@@ -44,8 +44,10 @@ Vue.use(VueAuth, {
   loginData: {url: '/users/login', fetchUser: false},
   logoutData: {makeRequest: false},
   registerData: {url: '/users/register', method: 'POST', redirect: '/albums'},
-  fetchData: {enabled: false},
   refreshData: {enabled: false},
+  fetchData: {
+    enabled: false,
+  },
 });
 
 // tslint:disable-next-line:no-unused-expression

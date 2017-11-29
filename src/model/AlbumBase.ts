@@ -21,4 +21,8 @@ export class AlbumBase extends DocumentBase implements AlbumBaseOptions {
   get childCount(): number {
     return this._childCount;
   }
+
+  set childCount(val) {
+    this._childCount = val;
+  }
 }

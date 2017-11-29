@@ -86,6 +86,9 @@ const actions = {
       }
       if (group.name !== oldGroup.name) {
         updatedGroupResponse = await api.renameGroup(group.id, group.name);
+
+        // api is not sending the updated group, so we set the name ourself
+        updatedGroupResponse.data.name = group.name;
       }
 
       if (updatedGroupResponse) {

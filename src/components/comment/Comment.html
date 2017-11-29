@@ -7,5 +7,5 @@
   <div class="comment-content w-100">
     {{comment.content}}
   </div>
-  <i class="el-icon-delete fa-lg text-danger remove-comment" @click="removeComment"></i>
+  <i v-if="userId === comment.userId" class="el-icon-delete fa-lg text-danger remove-comment" @click="removeComment"></i>
 </div>

@@ -1,10 +1,10 @@
 import {AbstractApi} from './AbstractApi';
-import {DocumentBase} from '../model/DocumentBase';
 import Vue from 'vue';
+import {AlbumBase} from '../model/AlbumBase';
 
-export class DocumentApi extends AbstractApi<DocumentBase> {
-  constructor() {
-    super('/albums');
+export class AlbumApi extends AbstractApi<AlbumBase> {
+  constructor(url?: string) {
+    super(url || '/albums');
   }
 
   async update() {
@@ -25,4 +25,5 @@ export class DocumentApi extends AbstractApi<DocumentBase> {
       newParentId,
     });
   }
+
 }

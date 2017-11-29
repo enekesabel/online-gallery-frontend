@@ -1,0 +1,14 @@
+<div>
+  <h4>Pictures shared with me</h4>
+  <el-row :gutter="10" v-if="parsedShares.length>0" v-for="share in parsedShares">
+    <h5 class="mt-4 mb-2">{{share.name}}</h5>
+    <el-col class="mt-3" v-for="child in share.pictures" :xs="24" :sm="12" :md="8" :lg="6">
+      <document-preview :document="child"></document-preview>
+    </el-col>
+  </el-row>
+  <el-row v-if="parsedShares.length === 0">
+    <el-col :sm="24" class="text-center my-4">
+      <p>There are no images shared with you yet.</p>
+    </el-col>
+  </el-row>
+</div>

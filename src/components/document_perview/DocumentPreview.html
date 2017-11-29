@@ -8,25 +8,82 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="share">Share</el-dropdown-item>
         <el-dropdown-item command="move">Move</el-dropdown-item>
-        <el-dropdown-item command="rename">Rename</el-dropdown-item>
+        <el-dropdown-item command="edit">Edit</el-dropdown-item>
+        <el-dropdown-item command="download">Download</el-dropdown-item>
         <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog
       title="Rename album"
       :visible.sync="renameAlbumDialogVisible">
-      <el-form :model="documentNameForm" label-position="left" label-width="120px" :rules="rules"
-               ref="documentNameForm">
+      <el-form :model="albumForm" label-position="left" label-width="120px" :rules="rules"
+               ref="albumForm">
         <el-form-item label="Album name" prop="documentName">
           <el-input :placeholder="document.displayName"
                     size="small"
-                    ref="documentNameInput"
-                    v-model="documentNameForm.documentName">
+                    v-model="albumForm.documentName">
           </el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="cancelRename">Cancel</el-button>
-      <el-button type="primary" @click="saveDocumentName">Save</el-button>
+      <el-button @click="cancelEdit">Cancel</el-button>
+      <el-button type="primary" @click="saveDocument">Save</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Edit picture"
+      :visible.sync="editPictureDialogVisible">
+      <el-form :model="pictureForm" label-position="left" label-width="120px" :rules="pictureRules"
+               ref="pictureForm">
+        <el-form-item label="Picture name" prop="pictureName">
+          <el-input :placeholder="document.displayName"
+                    size="small"
+                    v-model="pictureForm.pictureName">
+          </el-input>
+          <el-input placeholder="Add description to this image"
+                    type="textarea"
+                    autosize
+                    v-model="pictureForm.description">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <el-button @click="cancelEdit">Cancel</el-button>
+      <el-button type="primary" @click="saveDocument">Save</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Move"
+      @open="onMoveDialogOpen"
+      :visible.sync="moveDialogVisible">
+      <el-tree
+        :data="[albumHierarchy]"
+        :props="defaultProps"
+        accordion
+        @node-click="selectAlbum">
+      </el-tree>
+      <div class="mt-2">
+        <el-button @click="cancelMove">Cancel</el-button>
+        <el-button type="primary" @click="moveDocument">Move</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="Share"
+      width="600px"
+      @open="onShareDialogOpen"
+      :visible.sync="shareDialogVisible">
+      <div class="mb-2">
+        <h5 class="mt-0">Users</h5>
+        <el-transfer
+          :titles="['Not shared', 'Shared with']"
+          v-model="sharedUserIds"
+          :data="parsedUsers">
+        </el-transfer>
+        <h5 class="mt-3">Groups</h5>
+        <el-transfer
+          :titles="['Not shared', 'Shared with']"
+          v-model="sharedGroupIds"
+          :data="parsedGroups">
+        </el-transfer>
+      </div>
+      <el-button @click="cancelShare">Cancel</el-button>
+      <el-button type="primary" @click="shareDocument">Share</el-button>
     </el-dialog>
   </template>
 </component>

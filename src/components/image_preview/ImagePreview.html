@@ -4,7 +4,7 @@
     <slot name="button"></slot>
   </div>
   </div>
-  <img :src="imageUrl" @click="openImage()" class="img-fluid preview-image"/>
+  <img :src="document.thumbnailImageUrl" @click="openImage()" class="img-fluid preview-image"/>
   <div v-if="false" class="p-2">
     {{document.commentsNumber}} comments
   </div>

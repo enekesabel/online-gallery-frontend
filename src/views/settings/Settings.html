@@ -1,3 +1,20 @@
-<div class="hello">
-  <h1>Settings</h1>
+<div>
+  <h4 class="m-0">My own groups</h4>
+  <el-form :model="settingsForm" label-position="left" :rules="rules" ref="settingsForm" label-width="120px">
+    <el-form-item label="Name" prop="name">
+      <el-input v-model="settingsForm.name"></el-input>
+    </el-form-item>
+    <el-form-item label="Password" prop="password">
+      <el-input v-model="settingsForm.password" type="password" auto-complete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="Confirm" prop="passwordConfirm">
+      <el-input type="password" v-model="settingsForm.passwordConfirm" auto-complete="off"></el-input>
+    </el-form-item>
+    <div class="d-flex justify-content-between">
+      <el-form-item>
+        <el-button type="primary" @click="save()">Save</el-button>
+      </el-form-item>
+    </div>
+  </el-form>
+
 </div>
