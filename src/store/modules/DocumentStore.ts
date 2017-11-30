@@ -268,7 +268,7 @@ const actions = {
   async shareDocument({commit}, {userIds, groupIds, document}) {
     try {
 
-      const contentType: ShareContentType = document.type === DocumentType.PICTURE? ShareContentType.PICTURE : ShareContentType.ALBUM;
+      const contentType: ShareContentType = document.type === DocumentType.PICTURE ? ShareContentType.PICTURE : ShareContentType.ALBUM;
 
       let share: Share;
       if (groupIds) {
@@ -399,6 +399,19 @@ const mutations = {
       newPictureOptions.comments = comments;
 
       state.album.pictures.splice(pictureIndex, 1, new Picture(newPictureOptions));
+    } else {
+      state.sharedWidthMe.forEach(picArr => {
+        const pictureIndex = picArr.findIndex(p => {
+          return p.id === comments[0].pictureId;
+        });
+        if (pictureIndex !== -1) {
+          const oldPicture = picArr[pictureIndex];
+          const newPictureOptions: PictureOptions = oldPicture.toObject();
+          newPictureOptions.comments = comments;
+
+          picArr.splice(pictureIndex, 1, new Picture(newPictureOptions));
+        }
+      });
     }
   },
   [MutationType.ADD_COMMENT](state: State, comment: Comment) {
@@ -406,7 +419,21 @@ const mutations = {
       return p.id === comment.pictureId;
     });
 
-    picture.comments.push(comment);
+    if (picture) {
+
+      picture.comments.push(comment);
+    } else {
+      state.sharedWidthMe.forEach(picArr => {
+        const pictureIndex = picArr.findIndex(p => {
+          return p.id === comment.pictureId;
+        });
+        if (pictureIndex !== -1) {
+          const picture = picArr[pictureIndex];
+
+          picture.comments.push(comment);
+        }
+      });
+    }
   },
   [MutationType.DELETE_COMMENT](state: State, comment: Comment) {
     const picture = state.album.pictures.find(p => {
@@ -419,13 +446,16 @@ const mutations = {
     if (commentIndex !== -1) {
       picture.comments.splice(commentIndex, 1);
     }
-  },
+  }
+  ,
   [MutationType.SET_SHARES](state: State, shares: Share[]) {
     state.shares = shares;
-  },
+  }
+  ,
   [MutationType.SET_SHARED_WITH_ME](state: State, sharedWithMe: Picture[][]) {
     state.sharedWidthMe = sharedWithMe;
-  },
+  }
+  ,
 };
 
 export default {
